@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Location Check</title>
+</head>
+<body>
+
+<h2>Check Location</h2>
+<button onclick="checkLocation()">Verify Me</button>
+
+<p id="result"></p>
+
+<script>
+function checkLocation() {
+    if (!navigator.geolocation) {
+        alert("Geolocation not supported");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(pos => {
+        fetch('/verify_location', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                lat: pos.coords.latitude,
+                lon: pos.coords.longitude
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("result").innerText =
+                "Status: " + data.status + " | Distance: " + Math.round(data.distance) + "m";
+        });
+    }, err => {
+        alert("Location access denied");
+    });
+}
+</script>
+
+</body>
+</html>
