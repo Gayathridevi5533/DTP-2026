@@ -1,7 +1,31 @@
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 from flask import Blueprint, request, jsonify, render_template
 import math
+from extensions import db
+
+
 
 routes = Blueprint("routes", __name__)
+
+class Attendance(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    ip = db.Column(db.String(100))
+
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
+
+    distance = db.Column(db.Float)
+
+    status = db.Column(db.String(20))
+
+    timestamp = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+    
 
 # 🔹 Change this to your target location (example coords)
 TARGET_LAT = -43.5075
@@ -39,7 +63,28 @@ def verify_location():
 
     dist = distance(user_lat, user_lon, TARGET_LAT, TARGET_LON)
 
-    if dist <= MAX_DISTANCE_METERS:
-        return jsonify({"status": "allowed", "distance": dist})
-    else:
-        return jsonify({"status": "denied", "distance": dist})
+
+    status = "allowed" if dist <= MAX_DISTANCE_METERS else "denied"
+
+    # GET USER IP
+    ip = request.remote_addr
+
+    # CREATE DATABASE RECORD
+    new_attendance = Attendance(
+        ip=ip,
+        latitude=user_lat,
+        longitude=user_lon,
+        distance=dist,
+        status=status
+    )
+
+    # SAVE TO DATABASE
+    db.session.add(new_attendance)
+    db.session.commit()
+
+    return jsonify({
+        "status": status,
+        "distance": round(dist, 2)
+    })
+    
+    
