@@ -3,6 +3,7 @@ from extensions import db
 
 from math import radians, sin, cos, sqrt, atan2
 from datetime import datetime
+from flask import Blueprint, render_template, request, jsonify
 
 routes = Blueprint("routes", __name__)
 
@@ -150,3 +151,13 @@ def submit_reason():
     return jsonify({
         "message": "not found"
     })
+
+@routes.route("/teacher")
+def teacher():
+
+    records = Attendance.query.all()
+
+    return render_template(
+        "teacher.html",
+        records=records
+    )
