@@ -15,12 +15,25 @@
     <h1>Mark Attendance</h1>
 
     <button onclick="checkLocation()">
-
-        Check Location
-
+        Mark Attendance
     </button>
 
     <p id="result"></p>
+
+    <!-- HIDDEN TEXTBOX -->
+    <div id="studyBox" style="display:none;">
+
+        <input
+            type="text"
+            id="study_reason"
+            placeholder="What are you working on?"
+        >
+
+        <button onclick="submitReason()">
+            Submit
+        </button>
+
+    </div>
 
     <script src="/static/style.js"></script>
 

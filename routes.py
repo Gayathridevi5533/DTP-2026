@@ -29,6 +29,8 @@ class Attendance(db.Model):
         default=datetime.utcnow
     )
 
+    study_reason = db.Column(db.String(300))
+
 
 # =========================
 # SCHOOL LOCATION
@@ -116,8 +118,35 @@ def verify_location():
 
     db.session.add(new_attendance)
     db.session.commit()
+    attendance_id = new_attendance.id
 
     return jsonify({
-        "status": status,
-        "distance": round(dist, 2)
+    "status": status,
+    "distance": round(dist, 2),
+    "id": attendance_id
+})
+
+@routes.route("/submit_reason", methods=["POST"])
+def submit_reason():
+
+    data = request.get_json()
+
+    attendance_id = data.get("id")
+
+    reason = data.get("study_reason")
+
+    record = Attendance.query.get(attendance_id)
+
+    if record:
+
+        record.study_reason = reason
+
+        db.session.commit()
+
+        return jsonify({
+            "message": "saved"
+        })
+
+    return jsonify({
+        "message": "not found"
     })

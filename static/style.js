@@ -1,8 +1,9 @@
+let attendanceID = null;
+
 function checkLocation() {
 
     const result = document.getElementById("result");
 
-    // NO GEOLOCATION
     if (!navigator.geolocation) {
 
         result.innerText =
@@ -13,7 +14,6 @@ function checkLocation() {
         return;
     }
 
-    // GET LOCATION
     navigator.geolocation.getCurrentPosition(
 
         pos => {
@@ -40,12 +40,17 @@ function checkLocation() {
 
             .then(data => {
 
+                attendanceID = data.id;
+
                 if (data.status === "allowed") {
 
                     result.innerText =
                         "✅ Attendance Recorded";
 
                     result.style.color = "green";
+
+                    // SHOW TEXTBOX
+                    document.getElementById("studyBox").style.display = "block";
 
                 }
 
@@ -71,4 +76,38 @@ function checkLocation() {
         }
 
     );
+}
+
+
+function submitReason() {
+
+    const reason =
+        document.getElementById("study_reason").value;
+
+    fetch('/submit_reason', {
+
+        method: 'POST',
+
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+
+            id: attendanceID,
+
+            study_reason: reason
+
+        })
+
+    })
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        alert("Study activity saved!");
+
+    });
+
 }
