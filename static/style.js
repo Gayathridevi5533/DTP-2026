@@ -2,19 +2,18 @@ function checkLocation() {
 
     const result = document.getElementById("result");
 
-    result.innerText = "Checking your location...";
-    result.style.color = "black";
-
+    // NO GEOLOCATION
     if (!navigator.geolocation) {
 
         result.innerText =
-            "❌ Geolocation is not supported on this device.";
+            "❌ Geolocation is not supported.";
 
         result.style.color = "red";
 
         return;
     }
 
+    // GET LOCATION
     navigator.geolocation.getCurrentPosition(
 
         pos => {
@@ -28,8 +27,11 @@ function checkLocation() {
                 },
 
                 body: JSON.stringify({
+
                     lat: pos.coords.latitude,
+
                     lon: pos.coords.longitude
+
                 })
 
             })
@@ -41,14 +43,16 @@ function checkLocation() {
                 if (data.status === "allowed") {
 
                     result.innerText =
-                        "✅ Your attendance has been recorded.";
+                        "✅ Attendance Recorded";
 
                     result.style.color = "green";
 
-                } else {
+                }
+
+                else {
 
                     result.innerText =
-                        "❌ You are outside school grounds.";
+                        "❌ Too far away";
 
                     result.style.color = "red";
                 }
@@ -59,34 +63,11 @@ function checkLocation() {
 
         err => {
 
-            if (err.code === 1) {
-
-                result.innerText =
-                    "❌ Please allow location access.";
-
-            } else if (err.code === 2) {
-
-                result.innerText =
-                    "❌ Unable to detect your location.";
-
-            } else if (err.code === 3) {
-
-                result.innerText =
-                    "❌ Location request timed out.";
-
-            } else {
-
-                result.innerText =
-                    "❌ Unknown location error.";
-            }
+            result.innerText =
+                "❌ Please allow location access.";
 
             result.style.color = "red";
-        },
 
-        {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0
         }
 
     );

@@ -1,12 +1,14 @@
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-from flask import Blueprint, request, jsonify, render_template
-import math
+from flask import Blueprint, render_template, request, jsonify
 from extensions import db
 
-
+from math import radians, sin, cos, sqrt, atan2
+from datetime import datetime
 
 routes = Blueprint("routes", __name__)
+
+# =========================
+# DATABASE MODEL
+# =========================
 
 class Attendance(db.Model):
 
@@ -15,6 +17,7 @@ class Attendance(db.Model):
     ip = db.Column(db.String(100))
 
     latitude = db.Column(db.Float)
+
     longitude = db.Column(db.Float)
 
     distance = db.Column(db.Float)
@@ -25,60 +28,92 @@ class Attendance(db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
-    
-
-# 🔹 Change this to your target location (example coords)
-TARGET_LAT = -43.5075
-TARGET_LON = 172.5762
-MAX_DISTANCE_METERS = 200 # allowed radius
 
 
-def distance(lat1, lon1, lat2, lon2):
-    # Haversine formula
-    R = 6371000  # Earth radius in meters
-    phi1 = math.radians(lat1)
-    phi2 = math.radians(lat2)
+# =========================
+# SCHOOL LOCATION
+# =========================
 
-    dphi = math.radians(lat2 - lat1)
-    dlambda = math.radians(lon2 - lon1)
+TARGET_LAT = -43.508
+TARGET_LON = 172.574
 
-    a = math.sin(dphi/2)**2 + math.cos(phi1)*math.cos(phi2)*math.sin(dlambda/2)**2
-    return 2 * R * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+MAX_DISTANCE = 200
 
+
+# =========================
+# DISTANCE FUNCTION
+# =========================
+
+def calculate_distance(lat1, lon1, lat2, lon2):
+
+    R = 6371000
+
+    dlat = radians(lat2 - lat1)
+    dlon = radians(lon2 - lon1)
+
+    a = (
+        sin(dlat / 2) ** 2
+        + cos(radians(lat1))
+        * cos(radians(lat2))
+        * sin(dlon / 2) ** 2
+    )
+
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+    return R * c
+
+
+# =========================
+# HOME PAGE
+# =========================
 
 @routes.route("/")
 def home():
+
     return render_template("index.html")
 
 
+# =========================
+# VERIFY LOCATION
+# =========================
+
 @routes.route("/verify_location", methods=["POST"])
 def verify_location():
+
     data = request.get_json()
 
     user_lat = data.get("lat")
     user_lon = data.get("lon")
 
-    if user_lat is None or user_lon is None:
-        return jsonify({"error": "Missing location"}), 400
+    user_ip = request.remote_addr
 
-    dist = distance(user_lat, user_lon, TARGET_LAT, TARGET_LON)
-
-
-    status = "allowed" if dist <= MAX_DISTANCE_METERS else "denied"
-
-    # GET USER IP
-    ip = request.remote_addr
-
-    # CREATE DATABASE RECORD
-    new_attendance = Attendance(
-        ip=ip,
-        latitude=user_lat,
-        longitude=user_lon,
-        distance=dist,
-        status=status
+    dist = calculate_distance(
+        user_lat,
+        user_lon,
+        TARGET_LAT,
+        TARGET_LON
     )
 
+    if dist <= MAX_DISTANCE:
+        status = "allowed"
+    else:
+        status = "denied"
+
     # SAVE TO DATABASE
+    new_attendance = Attendance(
+
+        ip=user_ip,
+
+        latitude=user_lat,
+
+        longitude=user_lon,
+
+        distance=dist,
+
+        status=status
+
+    )
+
     db.session.add(new_attendance)
     db.session.commit()
 
@@ -86,5 +121,3 @@ def verify_location():
         "status": status,
         "distance": round(dist, 2)
     })
-    
-    
