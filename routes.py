@@ -1,11 +1,51 @@
-from flask import Blueprint, render_template, request, jsonify
 from extensions import db
-
 from math import radians, sin, cos, sqrt, atan2
 from datetime import datetime
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for
+from flask_login import (
+    UserMixin,
+    login_user,
+    logout_user,
+    login_required,
+    current_user
+    )
+
+from werkzeug.security import (
+    generate_password_hash,
+    check_password_hash
+)
 
 routes = Blueprint("routes", __name__)
+from extensions import login_manager
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Student.query.get(int(user_id))
+
+
+
+
+class Student(UserMixin, db.Model):
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    username = db.Column(
+        db.String(100),
+        unique=True
+    )
+
+    email = db.Column(
+        db.String(120),
+        unique=True
+    )
+
+    password = db.Column(
+        db.String(300)
+    )
+
 
 # =========================
 # DATABASE MODEL
@@ -13,9 +53,22 @@ routes = Blueprint("routes", __name__)
 
 class Attendance(db.Model):
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
 
-    ip = db.Column(db.String(100))
+    student_id = db.Column(db.Integer)
+
+    student_name = db.Column(
+        db.String(100)
+    )
+
+    student_email = db.Column(
+        db.String(120)
+    )
+
+    ip = db.Column(db.String(50))
 
     latitude = db.Column(db.Float)
 
@@ -30,15 +83,17 @@ class Attendance(db.Model):
         default=datetime.utcnow
     )
 
-    study_reason = db.Column(db.String(300))
+    study_reason = db.Column(
+        db.String(300)
+    )
 
 
 # =========================
 # SCHOOL LOCATION
 # =========================
 
-TARGET_LAT = -43.508
-TARGET_LON = 172.574
+TARGET_LAT = -43.5075
+TARGET_LON = 172.5762
 
 MAX_DISTANCE = 200
 
@@ -71,6 +126,7 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 # =========================
 
 @routes.route("/")
+@login_required
 def home():
 
     return render_template("index.html")
@@ -102,19 +158,28 @@ def verify_location():
     else:
         status = "denied"
 
+    ip = request.remote_addr
+    
     # SAVE TO DATABASE
     new_attendance = Attendance(
 
-        ip=user_ip,
+    student_id=current_user.id,
 
-        latitude=user_lat,
+    student_name=current_user.username,
 
-        longitude=user_lon,
+    student_email=current_user.email,
 
-        distance=dist,
+    ip=ip,
 
-        status=status
+    latitude=user_lat,
 
+    longitude=user_lon,
+
+    distance=dist,
+
+    status=status,
+
+    study_reason=study_reason
     )
 
     db.session.add(new_attendance)
@@ -161,3 +226,59 @@ def teacher():
         "teacher.html",
         records=records
     )
+
+@routes.route("/login", methods=["GET", "POST"])
+def login():
+
+    if request.method == "POST":
+
+        username = request.form.get("username")
+
+        password = request.form.get("password")
+
+        user = Student.query.filter_by(
+            username=username
+        ).first()
+
+        if user and check_password_hash(
+            user.password,
+            password
+        ):
+
+            login_user(user)
+
+            return redirect(
+                url_for("routes.home")
+            )
+
+    return render_template("login.html")
+
+
+@routes.route("/signup", methods=["GET", "POST"])
+def signup():
+
+    if request.method == "POST":
+
+        username = request.form.get("username")
+
+        password = request.form.get("password")
+
+        # HASH PASSWORD
+        hashed_password = generate_password_hash(password)
+
+        email = request.form.get("email")
+
+        # CREATE USER
+        new_user = Student(
+            username=username,
+            email=email,
+            password=hashed_password
+        )
+
+        db.session.add(new_user)
+
+        db.session.commit()
+
+        return redirect(url_for("routes.login"))
+
+    return render_template("signup.html")
