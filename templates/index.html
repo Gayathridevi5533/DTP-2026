@@ -10,13 +10,9 @@
 
 </head>
 
-<body>
+<body onload="checkLocation()">
 
     <h1>Mark Attendance</h1>
-
-    <button onclick="checkLocation()">
-        Mark Attendance
-    </button>
 
     <p id="result"></p>
 
@@ -29,8 +25,10 @@
             placeholder="What are you working on?"
         >
 
+        <input type="hidden" id="latitude" value="">
+        <input type="hidden" id="longitude">
         <button onclick="submitReason()">
-            Submit
+            Submit Attendance
         </button>
 
     </div>

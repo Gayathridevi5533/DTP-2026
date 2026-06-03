@@ -1,6 +1,9 @@
 from extensions import db
 from math import radians, sin, cos, sqrt, atan2
 from datetime import datetime
+from flask_mail import Message
+import secrets
+from extensions import mail
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
 from flask_login import (
     UserMixin,
@@ -42,8 +45,17 @@ class Student(UserMixin, db.Model):
         unique=True
     )
 
+    student_code = db.Column(
+    db.String(50),
+    unique=True
+    )
+
     password = db.Column(
         db.String(300)
+    )
+
+    reset_token = db.Column(
+    db.String(200)
     )
 
 
@@ -58,15 +70,13 @@ class Attendance(db.Model):
         primary_key=True
     )
 
+    student_name = db.Column(db.String(100))
+
+    student_email = db.Column(db.String(120))
+
+    student_code = db.Column(db.String(50))
+
     student_id = db.Column(db.Integer)
-
-    student_name = db.Column(
-        db.String(100)
-    )
-
-    student_email = db.Column(
-        db.String(120)
-    )
 
     ip = db.Column(db.String(50))
 
@@ -76,7 +86,9 @@ class Attendance(db.Model):
 
     distance = db.Column(db.Float)
 
-    status = db.Column(db.String(20))
+    status = db.Column(
+        db.String(50)
+     )
 
     timestamp = db.Column(
         db.DateTime,
@@ -126,7 +138,6 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 # =========================
 
 @routes.route("/")
-@login_required
 def home():
 
     return render_template("index.html")
@@ -144,7 +155,7 @@ def verify_location():
     user_lat = data.get("lat")
     user_lon = data.get("lon")
 
-    user_ip = request.remote_addr
+    # user_ip = request.remote_addr
 
     dist = calculate_distance(
         user_lat,
@@ -154,42 +165,16 @@ def verify_location():
     )
 
     if dist <= MAX_DISTANCE:
-        status = "allowed"
-    else:
         status = "denied"
+    else:
+        status = "allowed"
 
-    ip = request.remote_addr
+    # ip = request.remote_addr
     
-    # SAVE TO DATABASE
-    new_attendance = Attendance(
-
-    student_id=current_user.id,
-
-    student_name=current_user.username,
-
-    student_email=current_user.email,
-
-    ip=ip,
-
-    latitude=user_lat,
-
-    longitude=user_lon,
-
-    distance=dist,
-
-    status=status,
-
-    study_reason=study_reason
-    )
-
-    db.session.add(new_attendance)
-    db.session.commit()
-    attendance_id = new_attendance.id
-
     return jsonify({
-    "status": status,
-    "distance": round(dist, 2),
-    "id": attendance_id
+        "status": status,
+        "distance": round(dist, 2)
+        # "id": attendance_id
 })
 
 @routes.route("/submit_reason", methods=["POST"])
@@ -197,24 +182,56 @@ def submit_reason():
 
     data = request.get_json()
 
-    attendance_id = data.get("id")
+    user_lat = data.get("lat")
+    user_lon = data.get("lon")
 
-    reason = data.get("study_reason")
+    dist = calculate_distance(
+        user_lat,
+        user_lon,
+        TARGET_LAT,
+        TARGET_LON
+    )
 
-    record = Attendance.query.get(attendance_id)
+    if dist <= MAX_DISTANCE:
+        status = "denied"
+    else:
+        status = "allowed"
 
-    if record:
+    ip = request.remote_addr
 
-        record.study_reason = reason
+    study_reason = data.get("study_reason")
 
-        db.session.commit()
+    new_attendance = Attendance(
 
-        return jsonify({
-            "message": "saved"
-        })
+        student_id=current_user.id,
+
+        student_code=current_user.student_code,
+
+        ip=ip,
+
+        latitude=user_lat,
+
+        longitude=user_lon,
+
+        distance=dist,
+
+        status=status, 
+
+        study_reason=study_reason
+    )
+
+    db.session.add(new_attendance)
+    db.session.commit()
 
     return jsonify({
-        "message": "not found"
+        "message": "saved"
+    })
+
+    db.session.add(new_attendance)
+    db.session.commit()
+    attendance_id = new_attendance.id    
+    return jsonify({
+         "message": "not found"
     })
 
 @routes.route("/teacher")
@@ -268,10 +285,17 @@ def signup():
 
         email = request.form.get("email")
 
+        student_code = request.form.get("student_code")
+
         # CREATE USER
         new_user = Student(
+
             username=username,
+
             email=email,
+
+            student_code=student_code,
+
             password=hashed_password
         )
 
@@ -282,3 +306,87 @@ def signup():
         return redirect(url_for("routes.login"))
 
     return render_template("signup.html")
+
+@routes.route("/forgot_password", methods=["GET", "POST"])
+def forgot_password():
+
+    if request.method == "POST":
+
+        email = request.form.get("email")
+
+        user = Student.query.filter_by(
+            email=email
+        ).first()
+
+        if user:
+
+            token = secrets.token_hex(16)
+
+            user.reset_token = token
+
+            db.session.commit()
+
+            reset_link = url_for(
+                "routes.reset_password",
+                token=token,
+                _external=True
+            )
+
+            msg = Message(
+                "Password Reset",
+                sender="gayathrideviganesh5533@gmail.com",
+                recipients=[email]
+            )
+
+            msg.body = f"""
+Click the link below to reset your password:
+
+{reset_link}
+"""
+
+            mail.send(msg)
+
+            return "Reset email sent!"
+
+        return "No account found"
+
+    return render_template(
+        "forgot_password.html"
+    )
+
+@routes.route(
+    "/reset_password/<token>",
+    methods=["GET", "POST"]
+)
+def reset_password(token):
+
+    user = Student.query.filter_by(
+        reset_token=token
+    ).first()
+
+    if not user:
+        return "Invalid token"
+
+    if request.method == "POST":
+
+        new_password = request.form.get(
+            "password"
+        )
+
+        hashed_password = generate_password_hash(
+            new_password
+        )
+
+        user.password = hashed_password
+
+        user.reset_token = None
+
+        db.session.commit()
+
+        return redirect(
+            url_for("routes.login")
+        )
+
+    return render_template(
+        "reset_password.html"
+    )

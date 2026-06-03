@@ -1,4 +1,6 @@
 let attendanceID = null;
+var lat;
+var lon;
 
 function checkLocation() {
 
@@ -39,11 +41,9 @@ function checkLocation() {
             .then(res => res.json())
 
             .then(data => {
-
-                attendanceID = data.id;
+                // attendanceID = data.id;
 
                 if (data.status === "allowed") {
-
                     result.innerText =
                         "✅ Attendance Recorded";
 
@@ -51,6 +51,9 @@ function checkLocation() {
 
                     // SHOW TEXTBOX
                     document.getElementById("studyBox").style.display = "block";
+
+                    document.getElementById("latitude").value = pos.coords.latitude;
+                    document.getElementById("longitude").value = pos.coords.longitude;
 
                 }
 
@@ -94,11 +97,14 @@ function submitReason() {
 
         body: JSON.stringify({
 
-            id: attendanceID,
+            lat: parseFloat(document.getElementById("latitude").value),
+
+            lon: parseFloat(document.getElementById("longitude").value),
 
             study_reason: reason
 
         })
+
 
     })
 
