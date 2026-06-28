@@ -12,6 +12,7 @@ from flask_login import (
     login_required,
     current_user
     )
+import re
 
 from werkzeug.security import (
     generate_password_hash,
@@ -165,9 +166,9 @@ def verify_location():
     )
 
     if dist <= MAX_DISTANCE:
-        status = "allowed"
-    else:
         status = "denied"
+    else:
+        status = "allowed"
 
     # ip = request.remote_addr
     
@@ -202,10 +203,13 @@ def submit_reason():
     study_reason = data.get("study_reason")
 
     new_attendance = Attendance(
+        student_name=current_user.username,
 
-        student_id=current_user.id,
+        student_email=current_user.email,
 
         student_code=current_user.student_code,
+
+        student_id=current_user.id,
 
         ip=ip,
 
@@ -215,7 +219,7 @@ def submit_reason():
 
         distance=dist,
 
-        status=status, 
+        status=status,
 
         study_reason=study_reason
     )
@@ -277,6 +281,8 @@ def signup():
     if request.method == "POST":
 
         username = request.form.get("username")
+        if not re.match(r"^[A-Za-z ]+$", username):
+            return "Name must contain letters and spaces only."
 
         password = request.form.get("password")
 

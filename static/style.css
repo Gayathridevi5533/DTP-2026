@@ -1,0 +1,17 @@
+.password-container {
+    position: relative;
+    width: 100px;
+}
+
+.password-container input {
+    width: 100%;
+    padding-right: 10px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
