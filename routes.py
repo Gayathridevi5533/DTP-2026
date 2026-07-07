@@ -166,9 +166,9 @@ def verify_location():
     )
 
     if dist <= MAX_DISTANCE:
-        status = "allowed"
-    else:
         status = "denied"
+    else:
+        status = "allowed"
 
     # ip = request.remote_addr
     
