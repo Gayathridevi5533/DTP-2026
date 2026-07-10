@@ -1,9 +1,8 @@
-from extensions import db
+from extensions import db, mail
 from math import radians, sin, cos, sqrt, atan2
 from datetime import datetime
 from flask_mail import Message
 import secrets
-from extensions import mail
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
 from flask_login import (
     UserMixin,
@@ -359,6 +358,24 @@ Click the link below to reset your password:
     return render_template(
         "forgot_password.html"
     )
+
+
+@routes.route("/test_mail")
+def test_mail():
+
+    print("AFTER index:")
+    msg = Message(
+        subject="Test Email",
+        sender="gayathrideviganesh5533@gmail.com",
+        recipients=["your_other_email@gmail.com"]
+    )
+
+    msg.body = "This is a test email from Flask."
+
+    mail.send(msg)
+
+    return "Email sent!"
+
 
 @routes.route(
     "/reset_password/<token>",
