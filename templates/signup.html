@@ -10,79 +10,74 @@
 
 <body>
 
-    <h1>Create Account</h1>
+    <div class="signup-container">
 
-    <form method="POST">
+    <div class="image-side">
+        <img src="{{ url_for('static', filename='images/hero.jpg') }}">
+    </div>
 
-        <input
-            type="text"
-            name="username"
-            pattern="[A-Za-z ]+"
-            title="Please enter your real name using letters only"
-            required
-        >
+   <div class="form-side">
 
-        <br><br>
-        
+        <div class="form-card">
 
-        <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            required
-        >  
-        <br><br>  
-        
+            <h1>Create Account</h1>
 
-        <input
-            type="text"
-            name="student_code"
-            placeholder="Student ID"
-            required
-            pattern="[0-9]{5}"
-            title="Student ID must be exactly 5 digits"
-            maxlength="5"
-        >
-        <br><br>
+            <form method="POST">
 
-        <div class="password-container">
+                <label>Full Name</label>
 
-            <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Password"
-            >
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter your full name"
+                    required
+                >
 
-            <span class="toggle-password"
-                onclick="togglePassword()">
-                👁️
-            </span>
+                <label>Email</label>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    required
+                >
+
+                <label>Student ID</label>
+                <input
+                    type="text"
+                    name="student_code"
+                    placeholder="Student ID"
+                    maxlength="5"
+                    required
+                >
+
+                <label>Password</label>
+                <div class="password-box">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        required
+                    >
+
+                    <span onclick="togglePassword()">
+                        👁
+                    </span>
+
+                </div>
+
+                <button type="submit">
+                    Sign Up
+                </button>
+
+            </form>
 
         </div>
 
-        <br><br>
+    </div>
 
-        <button type="submit">
-            Sign Up
-        </button>
-
-    </form>
-
-    <script>
-    function togglePassword() {
-
-        let passwordBox =
-            document.getElementById("password");
-
-        if (passwordBox.type === "password") {
-            passwordBox.type = "text";
-        }
-        else {
-            passwordBox.type = "password";
-        }
-    }
-    </script>
+</div>
 
 </body>
 
