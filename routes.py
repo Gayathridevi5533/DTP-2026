@@ -12,6 +12,8 @@ from flask_login import (
     current_user
     )
 import re
+import csv
+from io import TextIOWrapper
 
 from werkzeug.security import (
     generate_password_hash,
@@ -46,8 +48,13 @@ class Student(UserMixin, db.Model):
     )
 
     student_code = db.Column(
-    db.String(50),
-    unique=True
+        db.String(50),
+        unique=True
+    )
+
+    student_class = db.Column(
+        db.String(150),
+        unique=False
     )
 
     password = db.Column(
@@ -249,7 +256,7 @@ def teacher():
 
 @routes.route("/login", methods=["GET", "POST"])
 def login():
-
+    error = None
     if request.method == "POST":
 
         username = request.form.get("username")
@@ -257,21 +264,34 @@ def login():
         password = request.form.get("password")
 
         user = Student.query.filter_by(
-            username=username
+            student_code=username
         ).first()
 
         if user and check_password_hash(
             user.password,
             password
         ):
-
             login_user(user)
 
             return redirect(
                 url_for("routes.home")
             )
 
-    return render_template("login.html")
+        else:
+            error = "Invalid username or password."
+
+    return render_template("login.html", error=error)
+
+
+@routes.route("/logout")
+@login_required
+def logout():
+
+    logout_user()
+
+    return redirect(
+        url_for("routes.login")
+    )
 
 
 @routes.route("/signup", methods=["GET", "POST"])
@@ -311,6 +331,7 @@ def signup():
         return redirect(url_for("routes.login"))
 
     return render_template("signup.html")
+
 
 @routes.route("/forgot_password", methods=["GET", "POST"])
 def forgot_password():
@@ -375,6 +396,172 @@ def test_mail():
     mail.send(msg)
 
     return "Email sent!"
+
+
+@routes.route("/import_students", methods=["GET", "POST"])
+def import_students():
+
+    if request.method == "POST":
+
+        file = request.files["csv_file"]
+
+        csv_file = TextIOWrapper(
+            file,
+            encoding="utf-8"
+        )
+
+        reader = csv.DictReader(csv_file)
+
+        imported = 0
+
+        errors = []
+
+        csv_student_codes = set()
+
+        for row_number, row in enumerate(reader, start=2):
+
+            username = row.get(
+                "username",
+                ""
+            ).strip()
+
+            email = row.get(
+                "email",
+                ""
+            ).strip()
+
+            student_code = row.get(
+                "student_code",
+                ""
+            ).strip()
+
+            student_class = row.get(
+                "student_class",
+                ""
+            ).strip()
+
+            # ------------------
+            # REQUIRED FIELDS
+            # ------------------
+
+            if not username or not email or not student_code or not student_class:
+
+                errors.append(
+                    f"Row {row_number}: Missing data."
+                )
+
+                continue
+
+            # ------------------
+            # EMAIL VALIDATION
+            # ------------------
+
+            if not re.match(
+                r"^[^@]+@[^@]+\.[^@]+$",
+                email
+            ):
+
+                errors.append(
+                    f"Row {row_number}: Invalid email."
+                )
+
+                continue
+
+            # ------------------
+            # STUDENT ID
+            # ------------------
+
+            if not re.match(
+                r"^\d{5}$",
+                student_code
+            ):
+
+                errors.append(
+                    f"Row {row_number}: Student ID must be exactly 5 digits."
+                )
+
+                continue
+
+            # ------------------
+            # DUPLICATES IN CSV
+            # ------------------
+
+            if student_code in csv_student_codes:
+
+                errors.append(
+                    f"Row {row_number}: Duplicate student ID in CSV."
+                )
+
+                continue
+
+            csv_student_codes.add(
+                student_code
+            )
+
+            # ------------------
+            # DUPLICATES IN DB
+            # ------------------
+
+            existing_student = Student.query.filter_by(
+                student_code=student_code
+            ).first()
+
+            if existing_student:
+
+                errors.append(
+                    f"Row {row_number}: Student ID already exists."
+                )
+
+                continue
+
+            existing_email = Student.query.filter_by(
+                email=email
+            ).first()
+
+            if existing_email:
+
+                errors.append(
+                    f"Row {row_number}: Email already exists."
+                )
+
+                continue
+
+            # ------------------
+            # CREATE STUDENT
+            # ------------------
+
+            new_student = Student(
+
+                username=username,
+
+                email=email,
+
+                student_code=student_code,
+
+                student_class=student_class,
+
+                password="",
+
+                reset_token=None
+            )
+
+            db.session.add(
+                new_student
+            )
+
+            imported += 1
+
+        db.session.commit()
+
+        return f"""
+        Imported: {imported}<br>
+        Errors: {len(errors)}<br><br>
+        {'<br>'.join(errors)}
+        """
+
+    return render_template(
+        "import_students.html"
+    )
 
 
 @routes.route(

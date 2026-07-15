@@ -230,6 +230,19 @@ body{
     background:#00695c;
 }
 
+.error-message{
+
+    color:#d32f2f;
+
+    background:#ffebee;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    margin-bottom:20px;
+}
+
 /* =========================
    RESPONSIVE
 ========================= */
