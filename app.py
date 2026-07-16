@@ -8,12 +8,6 @@ app = Flask(__name__)
 # SECRET KEY
 app.config["SECRET_KEY"] = "supersecretkey"
 
-# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-# app.config['MAIL_PORT'] = 587
-# app.config['MAIL_USERNAME'] = 'gayathrideviganesh5533@gmail.com'  # Use your actual Gmail address
-# app.config['MAIL_PASSWORD'] = 'mypfxfgvoxdnyuxu'     # Use your generated App Password
-# app.config['MAIL_USE_TLS'] = True
-# app.config['MAIL_USE_SSL'] = False
 
 app.config['MAIL_SERVER'] = 'localhost'
 app.config['MAIL_PORT'] = 25
