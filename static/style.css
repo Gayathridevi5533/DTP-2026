@@ -1,275 +1,267 @@
-/* =========================
-   PAGE
-========================= */
-
-body{
-    margin:0;
-    background:#f5f5f5;
-    font-family:Arial, sans-serif;
+/* ---------- CSS Variables ---------- */
+:root {
+  --green: #0b5545;
+  --green-dark: #084638;
+  --green-light: #e8f0ee;
+  --text: #ffffff;
+  --text-dark: #1a1a1a;
+  --gray: #f4f4f4;
+  --border: #d1d5db;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --radius: 8px;
 }
 
-/* =========================
-   MAIN CONTAINER
-========================= */
-
-.signup-container{
-
-    width:90%;
-    max-width:1400px;
-
-    height:700px;
-
-    margin:60px auto;
-
-    display:flex;
-
-    overflow:hidden;
-
-    border-radius:50px 0 120px 0;
-
-    background:linear-gradient(
-        135deg,
-        #004E42,
-        #007565
-    );
-
-    box-shadow:
-    0 12px 30px rgba(0,0,0,0.15);
+/* ---------- Reset ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* =========================
-   IMAGE SIDE
-========================= */
-
-.image-side{
-
-    width:52%;
-
-    position:relative;
-
-    overflow:hidden;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--gray);
+  color: var(--text-dark);
+  line-height: 1.6;
 }
 
-.image-side img{
-
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
-/* Decorative Burnside-style stripe */
-
-.image-side::before{
-
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    top:0;
-
-    width:70px;
-    height:100%;
-
-    z-index:2;
-
-    background:
-    repeating-linear-gradient(
-        45deg,
-        rgba(0,78,66,0.85) 0px,
-        rgba(0,78,66,0.85) 10px,
-        transparent 10px,
-        transparent 20px
-    );
+/* ---------- Navbar (thin, logo only on right) ---------- */
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.4rem 2rem;
+  background-color: var(--green);
+  height: 55px;
 }
 
-/* =========================
-   FORM SIDE
-========================= */
-
-.form-side{
-    width:48%;
-
-    padding:80px 70px;
+.navbar .logo-img {
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
-/* =========================
-   FORM CARD
-========================= */
-
-.form-card{
-
-    .form-card{
-    width:420px;
-}
+/* Hide anything else that might be in the navbar */
+.navbar .nav-links,
+.navbar .logo-text {
+  display: none;
 }
 
-.form-card h1{
-    color:white;
-
-    font-size:42px;
-
-    font-weight:700;
-
-    margin-bottom:25px;
+/* ---------- Signup Section (split card like the picture) ---------- */
+.signup-section {
+  min-height: calc(100vh - 55px - 200px); /* fill between nav & footer */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1.5rem;
+  background-color: #f3f4f2;
 }
 
-/* =========================
-   LABELS
-========================= */
-
-.form-card label{
-
-    display:block;
-
-    color:white;
-
-    font-size:18px;
-
-    font-weight:600;
-
-    margin-bottom:8px;
+.signup-container {
+  display: flex;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 520px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  background-color: var(--green);
 }
 
-/* =========================
-   INPUTS
-========================= */
-
-.form-card input{
-
-    width:100%;
-
-    height:58px;
-
-    border:2px solid #e6e6e6;
-
-    border-radius:10px;
-
-    background:white;
-
-    padding:0 18px;
-
-    font-size:18px;
-
-    margin-bottom:20px;
-
-    box-sizing:border-box;
-
-    outline:none;
+/* Left image side */
+.image-side {
+  flex: 1;
+  overflow: hidden;
 }
 
-.form-card input:focus{
-
-    box-shadow:
-    0 0 0 3px rgba(255,255,255,0.25);
+.image-side img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-/* =========================
-   PASSWORD FIELD
-========================= */
-
-.password-box{
-
-    position:relative;
+/* Right green form side */
+.form-side {
+  flex: 1;
+  background-color: var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 3.5rem;
 }
 
-.password-box input{
-
-    margin-bottom:0;
+.form-card {
+  width: 100%;
+  color: #ffffff;
 }
 
-.password-box span{
-
-    position:absolute;
-
-    right:20px;
-
-    top:50%;
-
-    transform:translateY(-50%);
-
-    cursor:pointer;
-
-    font-size:20px;
-
-    color:#666;
+.form-card h2,
+.form-card h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.75rem;
+  color: #ffffff;
 }
 
-/* =========================
-   SIGN UP BUTTON
-========================= */
-
-.form-card button{
-
-    width:100%;
-
-    height:60px;
-
-    margin-top:30px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:#004E42;
-
-    color:white;
-
-    font-size:22px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:0.3s;
+/* Form fields */
+.signup-form label,
+.form-card label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.4rem;
+  margin-top: 0.9rem;
 }
 
-.form-card button:hover{
-
-    background:#00695c;
+.signup-form input,
+.form-card input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #ffffff;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+  outline: none;
 }
 
-.error-message{
-
-    color:#d32f2f;
-
-    background:#ffebee;
-
-    padding:12px;
-
-    border-radius:8px;
-
-    margin-bottom:20px;
+.signup-form input::placeholder,
+.form-card input::placeholder {
+  color: #9ca3af;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* Password field with eye icon */
+.password-box {
+  position: relative;
+}
 
-@media(max-width:1000px){
+.password-box input {
+  padding-right: 2.5rem;
+  background-color: #eef1f8;
+}
 
-    .signup-container{
+.password-box span {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #4b5563;
+  user-select: none;
+}
 
-        flex-direction:column;
+/* Sign Up button */
+.signup-form button,
+.form-card button {
+  width: 100%;
+  margin-top: 1.75rem;
+  padding: 0.9rem;
+  background-color: var(--green-dark);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
 
-        height:auto;
-    }
+.signup-form button:hover,
+.form-card button:hover {
+  background-color: #063428;
+}
 
-    .image-side{
+/* ---------- Responsive ---------- */
+@media (max-width: 800px) {
+  .signup-container {
+    flex-direction: column;
+  }
+  .image-side {
+    height: 220px;
+  }
+  .form-side {
+    padding: 2rem 1.5rem;
+  }
+}
 
-        width:100%;
 
-        height:300px;
-    }
+/* ---------- Footer ---------- */
+.footer {
+  background-color: var(--green-dark);
+  color: var(--text);
+  padding: 2rem;
+  text-align: center;
+}
 
-    .form-side{
+.footer-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
 
-        width:100%;
-    }
+.footer-links a {
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: opacity 0.2s ease;
+}
 
-    .form-card h1{
+.footer-links a:hover {
+  opacity: 0.8;
+}
 
-        font-size:48px;
-    }
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.socials a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--text);
+  border-radius: 50%;
+  color: var(--text);
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.socials a:hover {
+  background-color: var(--text);
+  color: var(--green-dark);
+}
+
+.footer-credit {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .navbar .nav-links {
+    gap: 1rem;
+  }
+
+  .signup-container {
+    padding: 1.75rem;
+  }
 }
