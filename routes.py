@@ -3,7 +3,7 @@ from math import radians, sin, cos, sqrt, atan2
 from datetime import datetime
 from flask_mail import Message
 import secrets
-from flask import Blueprint, render_template, request, jsonify, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash
 from flask_login import (
     UserMixin,
     login_user,
@@ -600,3 +600,28 @@ def reset_password(token):
     return render_template(
         "reset_password.html"
     )
+
+
+@routes.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+
+    if request.method == 'POST':
+
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+
+        if not check_password_hash(
+                current_user.password,
+                current_password):
+            flash('Current password is incorrect.')
+            return redirect(url_for('routes.change_password'))
+
+        current_user.password = generate_password_hash(new_password)
+
+        db.session.commit()
+
+        flash('Password changed successfully.')
+        return redirect(url_for('routes.login'))
+
+    return render_template('change_password.html')
