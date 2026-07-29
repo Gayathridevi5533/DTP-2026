@@ -2960,14 +2960,46 @@
                             </div>
                             <div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
                                 <div class="wp-block-cover has-background-color has-text-color has-link-color wp-elements-fd0b757e548a961816680a284ec6687a" style="border-bottom-right-radius:100px;padding-top:var(--wp--preset--spacing--60);padding-right:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--60)">
-                                    <span aria-hidden="true" class="wp-block-cover__background has-background-dim-100 has-background-dim has-background-gradient" style="background:linear-gradient(135deg,rgb(0,78,66) 0%,rgb(0,171,142) 100%)"></span>
-                                    
+                                    <span aria-hidden="true" class="wp-block-cover__background has-background-dim-100 has-background-dim has-background-gradient" style="background:linear-gradient(135deg,rgb(0,78,66) 0%,rgb(0,171,142) 100%)">
+                                            {% if error %}
+                                            <p class="error-message">
+                                                {{ error }}
+                                            </p>
+                                        {% endif %}
+
+                                        <form method="POST">
+
+                                            <input
+                                                type="text"
+                                                name="username"
+                                                placeholder="Username"
+                                            >
+
+                                            <br><br>
+
+                                            <input
+                                                type="password"
+                                                name="password"
+                                                placeholder="Password"
+                                            >
+
+                                            <br><br>
+
+                                            <button type="submit">
+                                                Login
+                                            </button>
+
+                                            <a href="/forgot_password">
+                                                Forgot Password?
+                                            </a>
+                                        </form>
+                                    </span> 
+    
                                 </div>
                             </div>
                         </div>
                         <div class="wp-block-buttons is-content-justification-right is-layout-flex wp-container-core-buttons-is-layout-938471dc wp-block-buttons-is-layout-flex">
                             <div class="wp-block-button">
-                                
                             </div>
                         </div>
                     </div>
