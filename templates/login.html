@@ -8,6 +8,15 @@
                 Cookies.set('welcome', 'no-welcome js');
             }
         </script>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+            <link rel="stylesheet"
+                href="{{ url_for('static', filename='style.css') }}">
+
+            <title>Login</title>
+        </head>
         <meta charset="UTF-8">
         <meta name="description" content="Burnside High School is a successful and highly regarded school. Being one of the largest secondary schools in New Zealand affords our students a wealth of opportunities in all aspects of their learning.">
         <link rel="stylesheet" href="https://www.burnside.school.nz/wp-content/themes/burnside/stylesheet.css?v=169" type="text/css" media="screen">
@@ -2967,33 +2976,46 @@
                                             </p>
                                         {% endif %}
 
-                                        <form method="POST">
+                                        <form method="post" class="bhs-form">
 
-                                            <input
-                                                type="text"
-                                                name="username"
-                                                placeholder="Username"
-                                            >
+                                            <label class="bhs-field">
+                                            <span class="bhs-label">Student ID</span>
+                                            <div class="bhs-input-wrap">
+                                                <svg class="bhs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                                </svg>
+                                                <input type="text" name="student_id" placeholder="e.g. 45665" required>
+                                            </div>
+                                            </label>
 
-                                            <br><br>
+                                            <label class="bhs-field">
+                                            <span class="bhs-label">Password</span>
+                                            <div class="bhs-input-wrap">
+                                                <svg class="bhs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                                </svg>
+                                                <input type="password" name="password" id="bhs-password" placeholder="••••••••" required>
+                                                <button type="button" class="bhs-eye" id="bhs-toggle" aria-label="Show password">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>
+                                                </svg>
+                                                </button>
+                                            </div>
+                                            </label>
 
-                                            <input
-                                                type="password"
-                                                name="password"
-                                                placeholder="Password"
-                                            >
-
-                                            <br><br>
-
-                                            <button type="submit">
-                                                Login
+                                            <button type="submit" class="bhs-submit">
+                                            Sign in &amp; record attendance
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                             </button>
 
-                                            <br><br>
-
-                                            <a href="/forgot_password">
-                                                Forgot Password?
-                                            </a>
+                                            <div class="bhs-foot">
+                                            <a href="/templates/forgot_password.html">Forgot password?</a>
+                                            <span>Need help? Email the office.</span>
+                                            </div>
                                         </form>
                                     </span> 
     
