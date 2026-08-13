@@ -749,3 +749,268 @@ tbody tr:hover {
     }
 
 }
+
+/* =====================================================
+   IMPORT STUDENT ROLL PAGE
+===================================================== */
+
+.import-card {
+
+    background-color: var(--white);
+
+    border-radius: 10px;
+
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow);
+
+    padding: 30px;
+
+    margin-top: 5px;
+}
+
+
+/* Import card heading */
+
+.import-card-header {
+
+    margin-bottom: 28px;
+
+}
+
+
+.import-card-header h2 {
+
+    margin: 0 0 7px;
+
+    color: var(--dark-green);
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+}
+
+
+.import-card-header p {
+
+    margin: 0;
+
+    color: var(--text-grey);
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================
+   IMPORT FORM
+========================= */
+
+.import-form {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 20px;
+
+}
+
+
+/* File input container */
+
+.file-group {
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+
+.file-group label {
+
+    color: var(--dark-green);
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+}
+
+
+/* File input */
+
+.file-group input[type="file"] {
+
+    width: 100%;
+
+    min-height: 45px;
+
+    padding: 7px 10px;
+
+    border: 1px solid #cbd6d2;
+
+    border-radius: 5px;
+
+    background-color: white;
+
+    color: var(--text-dark);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+
+/* File input focus */
+
+.file-group input[type="file"]:focus {
+
+    outline: none;
+
+    border-color: var(--dark-green);
+
+    box-shadow:
+        0 0 0 3px rgba(7, 92, 75, 0.12);
+
+}
+
+
+/* Choose File button */
+
+.file-group input[type="file"]::file-selector-button {
+
+    margin-right: 12px;
+
+    padding: 7px 14px;
+
+    border: none;
+
+    border-radius: 4px;
+
+    background-color: var(--light-green);
+
+    color: var(--dark-green);
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease;
+
+}
+
+
+.file-group input[type="file"]::file-selector-button:hover {
+
+    background-color: #d5ebe4;
+
+}
+
+
+/* =========================
+   IMPORT BUTTON
+========================= */
+
+.import-form .import-button {
+
+    height: 45px;
+
+    padding: 0 25px;
+
+    white-space: nowrap;
+
+}
+
+
+/* =========================
+   HELP MESSAGE
+========================= */
+
+.import-help {
+
+    margin-top: 25px;
+
+    padding: 14px 17px;
+
+    background-color: var(--light-green);
+
+    border-left: 4px solid var(--accent-green);
+
+    border-radius: 5px;
+
+    color: var(--text-grey);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+}
+
+
+.import-help strong {
+
+    color: var(--dark-green);
+
+}
+
+
+/* =========================
+   IMPORT PAGE RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+    .import-card {
+
+        padding: 22px;
+
+    }
+
+
+    .import-form {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 15px;
+
+    }
+
+
+    .file-group {
+
+        width: 100%;
+
+    }
+
+
+    .import-form .import-button {
+
+        width: 100%;
+
+    }
+
+}

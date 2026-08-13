@@ -1,31 +1,129 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Import Students</title>
+
+    <!-- Your existing CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 
 <body>
 
-    <h1>Import Student Roll</h1>
+    <!-- =========================
+         NAVBAR
+    ========================== -->
 
-    <form
-        method="POST"
-        enctype="multipart/form-data"
-    >
+    <nav class="navbar">
 
-        <input
-            type="file"
-            name="csv_file"
-            accept=".csv"
-            required
-        >
+        <div class="nav-title">
+            Teacher Attendance
+        </div>
 
-        <button type="submit">
-            Import CSV
-        </button>
+        <div class="nav-buttons">
 
-    </form>
+            <a
+                href="{{ url_for('routes.teacher') }}"
+                class="nav-link"
+            >
+                Dashboard
+            </a>
+
+            <a
+                href="{{ url_for('routes.import_students') }}"
+                class="nav-link active"
+            >
+                Import Student Roll
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="container">
+
+        <div class="page-header">
+
+            <h1>Import Student Roll</h1>
+
+            <p>
+                Upload a CSV file containing your student information.
+            </p>
+
+        </div>
+
+
+        <!-- =========================
+             IMPORT CARD
+        ========================== -->
+
+        <div class="import-card">
+
+            <div class="import-card-header">
+
+                <h2>Student Roll</h2>
+
+                <p>
+                    Select your student roll CSV file to import
+                    students into the attendance system.
+                </p>
+
+            </div>
+
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+                class="import-form"
+            >
+
+                <div class="file-group">
+
+                    <label for="csv_file">
+                        Student Roll CSV File
+                    </label>
+
+                    <input
+                        type="file"
+                        id="csv_file"
+                        name="csv_file"
+                        accept=".csv"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="import-button"
+                >
+                    Import CSV
+                </button>
+
+            </form>
+
+
+            <div class="import-help">
+
+                <strong>CSV file:</strong>
+
+                Please make sure your student roll is saved
+                as a CSV file before uploading.
+
+            </div>
+
+        </div>
+
+    </main>
 
 </body>
 

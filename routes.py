@@ -2,6 +2,7 @@ from extensions import db, mail
 from math import radians, sin, cos, sqrt, atan2
 from datetime import datetime
 from flask_mail import Message
+from flask import request
 import secrets
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash
 from flask_login import (
