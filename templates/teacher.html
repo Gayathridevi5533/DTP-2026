@@ -1,45 +1,482 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Teacher Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Teacher Attendance Dashboard</title>
+
+  <link rel="stylesheet" href="/static/css/style.css">
 </head>
 
 <body>
 
-    <h1>Teacher Attendance Dashboard</h1>
+    <!-- Navigation -->
+    <nav class="navbar">
 
-    <table border="1" cellpadding="10">
+        <div class="nav-title">
+            Teacher Attendance
+        </div>
 
-        <tr>
-            <th>Student Name</th>
-            <th>Student ID</th>
-            <th>IP</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Distance</th>
-            <th>Status</th>
-            <th>Timestamp</th>
-            <th>Study Reason</th>
-        </tr>
+        <div class="nav-buttons">
 
-        {% for record in records %}
+            <a href="/teacher" class="nav-link active">
+                Dashboard
+            </a>
 
-        <tr>
-            <td>{{ record.student_name }}</td>
-            <td>{{ record.student_code }}</td>
-            <td>{{ record.ip }}</td>
-            <td>{{ record.latitude }}</td>
-            <td>{{ record.longitude }}</td>
-            <td>{{ record.distance }}</td>
-            <td>{{ record.status }}</td>
-            <td>{{ record.timestamp }}</td>
-            <td>{{ record.study_reason }}</td>
-        </tr>
+            <a href="/import-students" class="nav-link">
+                Import Student Roll
+            </a>
 
-        {% endfor %}
+        </div>
 
-    </table>
+    </nav>
+
+
+    <!-- Main page -->
+    <main class="container">
+
+        <!-- Page heading -->
+        <div class="page-header">
+
+            <div>
+                <h1>Teacher Attendance Dashboard</h1>
+                <p>Monitor student attendance during study periods.</p>
+            </div>
+
+        </div>
+
+
+        <!-- Controls -->
+        <section class="controls-card">
+
+            <div class="control-group">
+
+                <label for="classFilter">
+                    Study Class
+                </label>
+
+                <select id="classFilter">
+                    <option value="all">All Classes</option>
+                    <option value="class1">Study Class 1</option>
+                    <option value="class2">Study Class 2</option>
+                    <option value="class3">Study Class 3</option>
+                    <option value="class4">Study Class 4</option>
+                    <option value="class5">Study Class 5</option>
+                    <option value="class6">Study Class 6</option>
+                </select>
+
+            </div>
+
+
+            <div class="control-group">
+
+                <label for="statusFilter">
+                    Attendance Status
+                </label>
+
+                <select id="statusFilter">
+
+                    <option value="all">
+                        All Students
+                    </option>
+
+                    <option value="present">
+                        Present
+                    </option>
+
+                    <option value="late">
+                        Late
+                    </option>
+
+                    <option value="absent">
+                        Absent
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="control-group search-group">
+
+                <label for="studentSearch">
+                    Search
+                </label>
+
+                <input
+                    type="text"
+                    id="studentSearch"
+                    placeholder="Search student name or ID..."
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- Attendance summary -->
+        <section class="summary-grid">
+
+            <div class="summary-card total">
+
+                <div class="summary-title">
+                    Total Students
+                </div>
+
+                <div class="summary-number" id="totalCount">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card present">
+
+                <div class="summary-title">
+                    Present
+                </div>
+
+                <div class="summary-number" id="presentCount">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card late">
+
+                <div class="summary-title">
+                    Late
+                </div>
+
+                <div class="summary-number" id="lateCount">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card absent">
+
+                <div class="summary-title">
+                    Absent
+                </div>
+
+                <div class="summary-number" id="absentCount">
+                    0
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Attendance table -->
+        <section class="table-card">
+
+            <div class="table-header">
+
+                <div>
+                    <h2>Student Attendance</h2>
+                    <p>Study period attendance records</p>
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table id="attendanceTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Student</th>
+                            <th>Student ID</th>
+                            <th>Class</th>
+                            <th>Status</th>
+                            <th>Sign-in Time</th>
+                            <th>Study Reason</th>
+                            <th>Distance</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for record in records %}
+
+                        <tr
+                            class="student-row"
+                            data-class="{{ record.study_class|default('class1')|lower|replace(' ', '') }}"
+                            data-status="{{ record.status|default('absent')|lower }}"
+                            data-name="{{ record.student_name|default('')|lower }}"
+                            data-id="{{ record.student_code|default('') }}"
+                        >
+
+                            <td>
+
+                                <div class="student-name">
+                                    {{ record.student_name or "Unknown Student" }}
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                {{ record.student_code }}
+                            </td>
+
+
+                            <td>
+                                {{ record.study_class|default("Not assigned") }}
+                            </td>
+
+
+                            <td>
+
+                                {% if record.status|lower == "allowed" %}
+
+                                    <span class="status-badge present-badge">
+                                        Present
+                                    </span>
+
+                                {% elif record.status|lower == "late" %}
+
+                                    <span class="status-badge late-badge">
+                                        Late
+                                    </span>
+
+                                {% elif record.status|lower == "denied" %}
+
+                                    <span class="status-badge denied-badge">
+                                        Denied
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status-badge absent-badge">
+                                        Absent
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td class="timestamp">
+
+                                {{ record.timestamp or "—" }}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if record.study_reason %}
+
+                                    {{ record.study_reason }}
+
+                                {% else %}
+
+                                    <span class="muted">
+                                        —
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if record.distance %}
+
+                                    {{ "%.1f"|format(record.distance|float) }} m
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Filtering JavaScript -->
+    <script>
+
+        const classFilter =
+            document.getElementById("classFilter");
+
+        const statusFilter =
+            document.getElementById("statusFilter");
+
+        const studentSearch =
+            document.getElementById("studentSearch");
+
+
+        function filterStudents() {
+
+            const selectedClass =
+                classFilter.value.toLowerCase();
+
+            const selectedStatus =
+                statusFilter.value.toLowerCase();
+
+            const search =
+                studentSearch.value.toLowerCase().trim();
+
+
+            const rows =
+                document.querySelectorAll(".student-row");
+
+
+            let total = 0;
+            let present = 0;
+            let late = 0;
+            let absent = 0;
+
+
+            rows.forEach(row => {
+
+                const rowClass =
+                    row.dataset.class.toLowerCase();
+
+                const rowStatus =
+                    row.dataset.status.toLowerCase();
+
+                const rowName =
+                    row.dataset.name.toLowerCase();
+
+                const rowID =
+                    row.dataset.id.toLowerCase();
+
+
+                const classMatch =
+                    selectedClass === "all" ||
+                    rowClass === selectedClass;
+
+
+                let statusMatch = true;
+
+
+                if (selectedStatus === "present") {
+
+                    statusMatch =
+                        rowStatus === "allowed";
+
+                }
+
+                else if (selectedStatus === "late") {
+
+                    statusMatch =
+                        rowStatus === "late";
+
+                }
+
+                else if (selectedStatus === "absent") {
+
+                    statusMatch =
+                        rowStatus === "absent";
+
+                }
+
+
+                const searchMatch =
+                    search === "" ||
+                    rowName.includes(search) ||
+                    rowID.includes(search);
+
+
+                if (
+                    classMatch &&
+                    statusMatch &&
+                    searchMatch
+                ) {
+
+                    row.style.display = "";
+
+                    total++;
+
+
+                    if (rowStatus === "allowed") {
+                        present++;
+                    }
+
+                    else if (rowStatus === "late") {
+                        late++;
+                    }
+
+                    else if (rowStatus === "absent") {
+                        absent++;
+                    }
+
+                }
+
+                else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+
+            document.getElementById("totalCount")
+                .textContent = total;
+
+            document.getElementById("presentCount")
+                .textContent = present;
+
+            document.getElementById("lateCount")
+                .textContent = late;
+
+            document.getElementById("absentCount")
+                .textContent = absent;
+
+        }
+
+
+        classFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+        statusFilter.addEventListener(
+            "change",
+            filterStudents
+        );
+
+        studentSearch.addEventListener(
+            "input",
+            filterStudents
+        );
+
+
+        // Run when page first loads
+        filterStudents();
+
+    </script>
 
 </body>
 

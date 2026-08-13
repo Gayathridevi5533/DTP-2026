@@ -1,483 +1,751 @@
-/* ---------- CSS Variables ---------- */
-:root {
-  --green: #0b5545;
-  --green-dark: #084638;
-  --green-light: #e8f0ee;
-  --text: #ffffff;
-  --text-dark: #1a1a1a;
-  --gray: #f4f4f4;
-  --border: #d1d5db;
-  --shadow: rgba(0, 0, 0, 0.1);
-  --radius: 8px;
+/* =====================================================
+   TEACHER ATTENDANCE DASHBOARD
+   BURNSIDE-STYLE GREEN THEME
+===================================================== */
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    box-sizing: border-box;
 }
 
-/* ---------- Reset ---------- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+html,
+body {
+    margin: 0;
+    padding: 0;
 }
+
+
+/* =====================================================
+   COLOUR PALETTE
+===================================================== */
+
+:root {
+
+    --dark-green: #075c4b;
+
+    --deep-green: #064c3f;
+
+    --medium-green: #08745d;
+
+    --light-green: #e6f3ef;
+
+    --accent-green: #0b8068;
+
+    --background: #f4f6f5;
+
+    --white: #ffffff;
+
+    --text-dark: #17332d;
+
+    --text-grey: #66736f;
+
+    --border: #dce4e1;
+
+    --blue: #2563eb;
+
+    --orange: #f59e0b;
+
+    --red: #dc2626;
+
+    --shadow:
+        0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =====================================================
+   BODY
+===================================================== */
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--gray);
-  color: var(--text-dark);
-  line-height: 1.6;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background-color: var(--background);
+
+    color: var(--text-dark);
+
+    min-height: 100vh;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
 
-/* ---------- Navbar (thin, logo only on right) ---------- */
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
 .navbar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0.4rem 2rem;
-  background-color: var(--green);
-  height: 55px;
+
+    height: 76px;
+
+    background-color: var(--dark-green);
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 52px;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.navbar .logo-img {
-  height: 40px;
-  width: auto;
-  display: block;
+
+/* Website title */
+
+.nav-title {
+
+    font-size: 25px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
 }
 
-/* Hide anything else that might be in the navbar */
-.navbar .nav-links,
-.navbar .logo-text {
-  display: none;
+
+/* Navigation buttons */
+
+.nav-buttons {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
 }
 
-/* ---------- Signup Section (split card like the picture) ---------- */
-.signup-section {
-  min-height: calc(100vh - 55px - 200px); /* fill between nav & footer */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 3rem 1.5rem;
-  background-color: #f3f4f2;
+
+.nav-link {
+
+    text-decoration: none;
+
+    color: white;
+
+    padding: 12px 20px;
+
+    border-radius: 5px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
 }
 
-.signup-container {
-  display: flex;
-  width: 100%;
-  max-width: 1100px;
-  min-height: 520px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-  background-color: var(--green);
+
+.nav-link:hover {
+
+    background-color:
+        rgba(255, 255, 255, 0.12);
+
 }
 
-/* Left image side */
-.image-side {
-  flex:1;
-    background:linear-gradient(
-        135deg,
-        #004E42,
-        #00AB8E
-    );
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.nav-link.active {
 
-    padding:60px;
+    background-color: var(--accent-green);
 
-    width: 50px;
-    position:relative;
-    overflow:hidden;
 }
 
-.image-side img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+
+/* =====================================================
+   MAIN CONTAINER
+===================================================== */
+
+.container {
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 42px 52px 60px;
 }
 
-/* Right green form side */
-.form-side{
-    flex:1;
-    background:linear-gradient(
-        135deg,
-        #004E42,
-        #00AB8E
-    );
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+/* =====================================================
+   PAGE HEADER
+===================================================== */
 
-    padding:60px;
+.page-header {
+
+    margin-bottom: 30px;
 }
 
-.form-card {
-  width: 90%;
-  color: #ffffff;
+
+.page-header h1 {
+
+    margin: 0 0 8px;
+
+    font-size: 34px;
+
+    font-weight: 700;
+
+    color: var(--dark-green);
+
 }
 
-.form-card h2,
-.form-card h1 {
-  font-size: 2rem;
-  font-weight: 500;
-  margin-bottom: 1.75rem;
-  color: #f0ebeb;
+
+.page-header p {
+
+    margin: 0;
+
+    color: var(--text-grey);
+
+    font-size: 16px;
+
 }
 
-/* Form fields */
-.signup-form label,
-.form-card label {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 400;
-  color: #ffffff;
-  margin-bottom: 0.4rem;
-  margin-top: 0.9rem;
+
+/* =====================================================
+   FILTER CARD
+===================================================== */
+
+.controls-card {
+
+    background-color: var(--white);
+
+    border-radius: 10px;
+
+    padding: 25px 30px;
+
+    display: flex;
+
+    gap: 28px;
+
+    align-items: flex-end;
+
+    margin-bottom: 28px;
+
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow);
 }
 
-.signup-form input,
-.form-card input {
-  width: 70%;
-  padding: 0.75rem 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #ffffff;
-  font-size: 0.8rem;
-  color: #1a1a1a;
-  outline: none;
-}
 
-.signup-form input::placeholder,
-.form-card input::placeholder {
-  color: #9ca3af;
-}
+.control-group {
 
-/* Password field with eye icon */
-.password-box {
-  position: relative;
-}
+    display: flex;
 
-.password-box input {
-  padding-right: 2.5rem;
-  background-color: #eef1f8;
-}
-
-.password-box span {
-  position: absolute;
-  right: 0.9rem;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  font-size: 1.1rem;
-  color: #4b5563;
-  user-select: none;
-}
-
-/* Sign Up button */
-.signup-form button,
-.form-card button {
-  width: 100%;
-  margin-top: 1.75rem;
-  padding: 0.9rem;
-  background-color: var(--green-dark);
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.signup-form button:hover,
-.form-card button:hover {
-  background-color: #063428;
-}
-
-/* ---------- Responsive ---------- */
-@media (max-width: 800px) {
-  .signup-container {
     flex-direction: column;
-  }
-  .image-side {
-    height: 220px;
-  }
-  .form-side {
-    padding: 2rem 1.5rem;
-  }
+
+    gap: 8px;
 }
 
 
-/* ---------- Footer ---------- */
-.footer {
-  background-color: var(--green-dark);
-  color: var(--text);
-  padding: 2rem;
-  text-align: center;
-}
+.control-group label {
 
-.footer-links {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-}
+    font-size: 14px;
 
-.footer-links a {
-  color: var(--text);
-  font-size: 0.95rem;
-  transition: opacity 0.2s ease;
-}
+    font-weight: 700;
 
-.footer-links a:hover {
-  opacity: 0.8;
-}
-
-.socials {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.socials a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--text);
-  border-radius: 50%;
-  color: var(--text);
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.socials a:hover {
-  background-color: var(--text);
-  color: var(--green-dark);
-}
-
-.footer-credit {
-  font-size: 0.85rem;
-  opacity: 0.8;
-}
-
-/* ---------- Responsive ---------- */
-@media (max-width: 600px) {
-  .navbar {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-
-  .navbar .nav-links {
-    gap: 1rem;
-  }
-
-  .signup-container {
-    padding: 1.75rem;
-  }
+    color: var(--dark-green);
 }
 
 
-.login-form{
-    width:100%;
+.control-group select,
+.control-group input {
+
+    height: 45px;
+
+    padding: 0 14px;
+
+    border: 1px solid #cbd6d2;
+
+    border-radius: 5px;
+
+    background-color: white;
+
+    font-size: 15px;
+
+    color: var(--text-dark);
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.form-group{
-    margin-bottom:25px;
+
+.control-group select {
+
+    min-width: 220px;
+
 }
 
-.form-group label{
-    display:block;
 
-    color:white;
+.search-group {
 
-    font-size:20px;
+    flex: 1;
 
-    font-weight:700;
-
-    margin-bottom:10px;
 }
 
-.form-group input{
-    width:100%;
 
-    height:54px;
+.search-group input {
 
-    border:none;
+    width: 100%;
 
-    border-radius:10px;
-
-    background:#f0f2f5;
-
-    padding:0 18px;
-
-    font-size:18px;
-
-    box-sizing:border-box;
-
-    outline:none;
 }
 
-.form-group input:focus{
-    border:2px solid white;
+
+/* Green focus instead of blue */
+
+.control-group select:focus,
+.control-group input:focus {
+
+    border-color: var(--dark-green);
+
+    box-shadow:
+        0 0 0 3px rgba(7, 92, 75, 0.12);
 }
 
-.password-box{
-    position:relative;
+
+/* =====================================================
+   SUMMARY CARDS
+===================================================== */
+
+.summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 22px;
+
+    margin-bottom: 30px;
 }
 
-.password-box input{
-    padding-right:55px;
+
+.summary-card {
+
+    background-color: white;
+
+    padding: 25px 25px 25px 30px;
+
+    border-radius: 10px;
+
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow);
+
+    position: relative;
+
+    overflow: hidden;
 }
 
-.toggle-password{
-    position:absolute;
 
-    right:18px;
+/* Left colour stripe */
 
-    top:50%;
+.summary-card::before {
 
-    transform:translateY(-50%);
+    content: "";
 
-    cursor:pointer;
+    position: absolute;
 
-    font-size:18px;
+    left: 0;
+
+    top: 0;
+
+    bottom: 0;
+
+    width: 5px;
 }
 
-.login-btn{
-    width:100%;
 
-    height:60px;
+/* Total */
 
-    border:none;
+.summary-card.total::before {
 
-    border-radius:12px;
+    background-color: var(--dark-green);
 
-    background:#004E42;
-
-    color:white;
-
-    font-size:24px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    margin-top:20px;
-
-    transition:0.3s;
 }
 
-.login-btn:hover{
-    background:#00695c;
+
+/* Present */
+
+.summary-card.present::before {
+
+    background-color: #159a70;
+
 }
 
-.forgot-link{
-    display:block;
 
-    margin-top:25px;
+/* Late */
 
-    color:white;
+.summary-card.late::before {
 
-    text-decoration:none;
+    background-color: var(--orange);
 
-    font-size:18px;
-
-    font-weight:600;
 }
 
-.forgot-link:hover{
-    text-decoration:underline;
+
+/* Absent */
+
+.summary-card.absent::before {
+
+    background-color: var(--red);
+
 }
 
-.login-card{
-    width:100%;
-    max-width:550px;
-    color:white;
+
+.summary-title {
+
+    color: var(--text-grey);
+
+    font-size: 15px;
+
+    margin-bottom: 10px;
+
 }
 
-.login-card h2{
-    font-size:42px;
-    font-weight:700;
-    margin-bottom:25px;
+
+.summary-number {
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    color: var(--dark-green);
+
 }
 
-.login-card label{
-    display:block;
-    margin-bottom:8px;
-    margin-top:20px;
-    font-size:18px;
-    font-weight:600;
+
+/* =====================================================
+   ATTENDANCE TABLE
+===================================================== */
+
+.table-card {
+
+    background-color: white;
+
+    border-radius: 10px;
+
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow);
+
+    overflow: hidden;
 }
 
-.login-card input{
-    width:100%;
-    height:60px;
-    border:none;
-    border-radius:10px;
-    background:white;
-    padding:0 18px;
-    font-size:18px;
+
+.table-header {
+
+    padding: 25px 30px;
+
+    border-bottom: 1px solid var(--border);
+
 }
 
-.password-box{
-    position:relative;
+
+.table-header h2 {
+
+    margin: 0 0 6px;
+
+    color: var(--dark-green);
+
+    font-size: 22px;
+
 }
 
-.password-box input{
-    padding-right:55px;
+
+.table-header p {
+
+    margin: 0;
+
+    color: var(--text-grey);
+
+    font-size: 14px;
+
 }
 
-.password-box span{
-    position:absolute;
-    right:18px;
-    top:50%;
-    transform:translateY(-50%);
-    cursor:pointer;
-    color:#555;
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-container {
+
+    overflow-x: auto;
+
 }
 
-.login-card button{
-    width:100%;
-    height:65px;
-    margin-top:30px;
-    border:none;
-    border-radius:10px;
-    background:#123c31;
-    color:white;
-    font-size:22px;
-    font-weight:700;
-    cursor:pointer;
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 900px;
 }
 
-.login-card button:hover{
-    background:#0d2f27;
+
+thead {
+
+    background-color:
+        #eef4f1;
 }
 
-.forgot-link{
-    display:inline-block;
-    margin-top:20px;
-    color:white;
-    text-decoration:none;
+
+th {
+
+    padding: 16px 18px;
+
+    text-align: left;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+    color: var(--dark-green);
+
+    border-bottom:
+        2px solid #d8e4df;
 }
 
-.error-message{
-    background:#ffd6d6;
-    color:#b30000;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:20px;
+
+td {
+
+    padding: 16px 18px;
+
+    border-bottom:
+        1px solid #edf1ef;
+
+    font-size: 14px;
+
+    color: #3d4d48;
 }
 
-body{
-    background:red !important;
+
+tbody tr {
+
+    transition:
+        background-color 0.15s ease;
+}
+
+
+tbody tr:hover {
+
+    background-color:
+        #f3f8f6;
+}
+
+
+.student-name {
+
+    font-weight: 700;
+
+    color: var(--dark-green);
+}
+
+
+.timestamp {
+
+    white-space: nowrap;
+
+    color: #53635e;
+}
+
+
+.muted {
+
+    color: #9aa7a3;
+}
+
+
+/* =====================================================
+   STATUS BADGES
+===================================================== */
+
+.status-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* Present */
+
+.present-badge {
+
+    background-color: #dff4ea;
+
+    color: #08744f;
+}
+
+
+/* Late */
+
+.late-badge {
+
+    background-color: #fff3d6;
+
+    color: #a16207;
+}
+
+
+/* Absent */
+
+.absent-badge {
+
+    background-color: #fee5e5;
+
+    color: #b91c1c;
+}
+
+
+/* Denied */
+
+.denied-badge {
+
+    background-color: #fce7eb;
+
+    color: #be123c;
+}
+
+
+/* =====================================================
+   IMPORT BUTTON
+===================================================== */
+
+.import-button {
+
+    background-color: var(--dark-green);
+
+    color: white;
+
+    border: none;
+
+    border-radius: 5px;
+
+    padding: 12px 24px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.import-button:hover {
+
+    background-color: var(--deep-green);
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .summary-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .controls-card {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .control-group select {
+
+        width: 100%;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .navbar {
+
+        height: auto;
+
+        padding: 18px 20px;
+
+        flex-direction: column;
+
+        gap: 15px;
+
+        align-items: flex-start;
+
+    }
+
+
+    .nav-buttons {
+
+        width: 100%;
+
+    }
+
+
+    .nav-link {
+
+        flex: 1;
+
+        text-align: center;
+
+    }
+
+
+    .container {
+
+        padding: 30px 20px;
+
+    }
+
+
+    .summary-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .page-header h1 {
+
+        font-size: 27px;
+
+    }
+
 }

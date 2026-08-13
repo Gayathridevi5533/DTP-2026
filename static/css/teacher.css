@@ -1,0 +1,766 @@
+/* =========================
+   GENERAL PAGE
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f4f7fb;
+
+    color: #1f2937;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+    height: 74px;
+    background-color: #006b5b;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 52px;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+
+/* LEFT SIDE: LOGO + TITLE */
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    height: 100%;
+}
+
+
+/* SCHOOL LOGO */
+
+.school-logo {
+    height: 48px;
+    width: auto;
+
+    object-fit: contain;
+    display: block;
+}
+
+
+/* TEACHER ATTENDANCE TEXT */
+
+.navbar-title {
+    color: #ffffff;
+
+    font-size: 24px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* RIGHT SIDE NAVIGATION */
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+
+/* NAVIGATION LINKS */
+
+.navbar-links a {
+    color: #ffffff;
+    text-decoration: none;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    padding: 12px 18px;
+    border-radius: 5px;
+
+    transition: background-color 0.2s ease;
+}
+
+
+/* ACTIVE DASHBOARD BUTTON */
+
+.navbar-links a.active {
+    background-color: #078873;
+}
+
+
+/* HOVER */
+
+.navbar-links a:hover {
+    background-color: #078873;
+}
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.container {
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 35px 40px 60px;
+}
+
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.page-header {
+
+    margin-bottom: 25px;
+}
+
+
+.page-header h1 {
+
+    margin: 0 0 8px;
+
+    font-size: 32px;
+
+    color: #14213d;
+
+}
+
+
+.page-header p {
+
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 15px;
+
+}
+
+
+/* =========================
+   FILTER / CONTROL AREA
+========================= */
+
+.controls-card {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 22px;
+
+    display: flex;
+
+    gap: 25px;
+
+    align-items: flex-end;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.06);
+
+    border: 1px solid #e5e7eb;
+
+}
+
+
+.control-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.control-group label {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #374151;
+
+}
+
+
+.control-group select,
+.control-group input {
+
+    height: 42px;
+
+    padding: 0 12px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 7px;
+
+    background: white;
+
+    font-size: 14px;
+
+    color: #1f2937;
+
+    outline: none;
+
+}
+
+
+.control-group select {
+
+    min-width: 200px;
+
+}
+
+
+.search-group {
+
+    flex: 1;
+
+}
+
+
+.search-group input {
+
+    width: 100%;
+
+}
+
+
+.control-group select:focus,
+.control-group input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.1);
+
+}
+
+
+/* =========================
+   SUMMARY CARDS
+========================= */
+
+.summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.summary-card {
+
+    background: white;
+
+    padding: 22px;
+
+    border-radius: 12px;
+
+    border: 1px solid #e5e7eb;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.05);
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+
+.summary-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    top: 0;
+
+    bottom: 0;
+
+    width: 5px;
+
+}
+
+
+.summary-card.total::before {
+
+    background: #2563eb;
+
+}
+
+
+.summary-card.present::before {
+
+    background: #16a34a;
+
+}
+
+
+.summary-card.late::before {
+
+    background: #f59e0b;
+
+}
+
+
+.summary-card.absent::before {
+
+    background: #dc2626;
+
+}
+
+
+.summary-title {
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.summary-number {
+
+    font-size: 30px;
+
+    font-weight: 700;
+
+    color: #111827;
+
+}
+
+
+/* =========================
+   TABLE CARD
+========================= */
+
+.table-card {
+
+    background: white;
+
+    border-radius: 12px;
+
+    border: 1px solid #e5e7eb;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.05);
+
+    overflow: hidden;
+
+}
+
+
+.table-header {
+
+    padding: 22px 24px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+}
+
+
+.table-header h2 {
+
+    margin: 0 0 5px;
+
+    color: #14213d;
+
+    font-size: 20px;
+
+}
+
+
+.table-header p {
+
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.table-container {
+
+    overflow-x: auto;
+
+}
+
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 900px;
+
+}
+
+
+thead {
+
+    background: #f8fafc;
+
+}
+
+
+th {
+
+    padding: 15px 18px;
+
+    text-align: left;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.04em;
+
+    color: #64748b;
+
+    border-bottom: 1px solid #e5e7eb;
+
+}
+
+
+td {
+
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #eef0f3;
+
+    font-size: 14px;
+
+    color: #374151;
+
+}
+
+
+tbody tr {
+
+    transition: background 0.15s ease;
+
+}
+
+
+tbody tr:hover {
+
+    background: #f8fafc;
+
+}
+
+
+.student-name {
+
+    font-weight: 600;
+
+    color: #111827;
+
+}
+
+
+.timestamp {
+
+    white-space: nowrap;
+
+    color: #4b5563;
+
+}
+
+
+.muted {
+
+    color: #9ca3af;
+
+}
+
+
+/* =========================
+   STATUS BADGES
+========================= */
+
+.status-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 6px 11px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+/* Green */
+
+.present-badge {
+
+    background: #dcfce7;
+
+    color: #15803d;
+
+}
+
+
+/* Orange */
+
+.late-badge {
+
+    background: #fef3c7;
+
+    color: #b45309;
+
+}
+
+
+/* Red */
+
+.absent-badge {
+
+    background: #fee2e2;
+
+    color: #b91c1c;
+
+}
+
+
+/* Dark red */
+
+.denied-badge {
+
+    background: #ffe4e6;
+
+    color: #be123c;
+
+}
+
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 900px) {
+
+    .navbar {
+
+        padding: 0 25px;
+
+    }
+
+
+    .navbar-brand {
+
+        gap: 14px;
+
+    }
+
+
+    .school-logo {
+
+        height: 58px;
+
+        max-width: 170px;
+
+    }
+
+
+    .navbar-divider {
+
+        height: 45px;
+
+    }
+
+
+    .nav-title {
+
+        font-size: 24px;
+
+    }
+
+
+    .nav-link {
+
+        font-size: 16px;
+
+        padding: 13px 18px;
+
+    }
+
+
+    .nav-buttons {
+
+        gap: 8px;
+
+    }
+
+
+    .container {
+
+        padding: 25px 20px;
+
+    }
+
+
+    .summary-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .controls-card {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .control-group select {
+
+        width: 100%;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .navbar {
+
+        height: auto;
+
+        min-height: 90px;
+
+        padding: 15px 20px;
+
+        flex-direction: column;
+
+        gap: 15px;
+
+        align-items: stretch;
+
+    }
+
+
+    .navbar-brand {
+
+        width: 100%;
+
+        justify-content: center;
+
+        gap: 12px;
+
+    }
+
+
+    .school-logo {
+
+        height: 50px;
+
+        max-width: 145px;
+
+    }
+
+
+    .navbar-divider {
+
+        height: 40px;
+
+    }
+
+
+    .nav-title {
+
+        font-size: 21px;
+
+    }
+
+
+    .nav-buttons {
+
+        width: 100%;
+
+        justify-content: center;
+
+        gap: 8px;
+
+    }
+
+
+    .nav-link {
+
+        flex: 1;
+
+        text-align: center;
+
+        padding: 12px 10px;
+
+        font-size: 14px;
+
+    }
+
+
+    .summary-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .page-header h1 {
+
+        font-size: 25px;
+
+    }
+
+}

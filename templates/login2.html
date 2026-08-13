@@ -16,7 +16,7 @@
         <meta name="description" content="Burnside High School is a successful and highly regarded school. Being one of the largest secondary schools in New Zealand affords our students a wealth of opportunities in all aspects of their learning.">
 
             <link rel="stylesheet"
-                href="{{ url_for('static', filename='login.css') }}">
+                href="/static/css/login.css">
 
             <title>Login</title>
         </head>
@@ -43,12 +43,40 @@
 <!-- login- body -->
 <div class="login-container">
 
-    <!-- Left Side Image -->
+    <!-- Left Side Text -->
 
-    <div class="image-side">
+    <div class="info-side">
 
-        <img src="{{ url_for('static', filename='images/hero.jpg') }}"
-             alt="Burnside High School">
+        <p class="subtitle">
+            YEAR 13 • PERIOD 1 ATTENDANCE
+        </p>
+
+        <h1>
+            Sign in to record your study session.
+        </h1>
+
+        <p class="description">
+
+            Burnside High School uses a secure
+            attendance verification system for
+            senior study periods.
+
+            Sign in using your Burnside credentials
+            to record your attendance.
+
+        </p>
+
+        <div class="features">
+
+            <p>✓ Secure Login</p>
+
+            <p>✓ IP Verification</p>
+
+            <p>✓ Attendance Recorded</p>
+
+            <p>✓ Burnside Network</p>
+
+        </div>
 
     </div>
 

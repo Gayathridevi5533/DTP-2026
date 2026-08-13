@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Staff Dashboard — Burnside Attendance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bhs-green:#2c4a3e;          /* forest green header */
+  --bhs-green-dark:#243d33;
+  --bhs-teal:#7fb3ac;           /* teal accent */
+  --bhs-bg:#ffffff;
+  --bhs-fg:#1b2420;
+  --bhs-muted:#6b7a74;
+  --bhs-muted-bg:#f3f5f4;
+  --bhs-border:#e2e6e4;
+  --bhs-success:#2f8f6b;
+  --bhs-danger:#c0392b;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bhs-bg);color:var(--bhs-fg);
+  font-family:"Source Sans 3",system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-weight:700;letter-spacing:-.01em;margin:0}
+.bhs-wrap{max-width:1400px;margin:0 auto;padding:0 24px}
+
+/* ---------- top bar ---------- */
+.bhs-header{background:var(--bhs-green);color:#fff}
+.bhs-header .bhs-wrap{height:80px;display:flex;align-items:center;justify-content:space-between}
+.bhs-menu{background:none;border:0;color:#fff;font:inherit;font-weight:600;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;letter-spacing:.02em}
+.bhs-menu:hover{color:var(--bhs-teal)}
+.bhs-brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none}
+.bhs-brand b{display:block;font-size:16px}
+.bhs-brand span{display:block;font-size:12px;opacity:.8;font-style:italic}
+.bhs-nav{border-top:1px solid rgba(255,255,255,.12);display:none}
+.bhs-nav.open{display:block}
+.bhs-nav .bhs-wrap{display:flex;gap:32px;padding-top:18px;padding-bottom:18px;font-size:14px}
+.bhs-nav a{color:#fff;text-decoration:none}
+.bhs-nav a:hover{color:var(--bhs-teal)}
+
+/* ---------- teal ribbon ---------- */
+.bhs-ribbon{background:var(--bhs-teal);color:var(--bhs-green-dark);
+  text-align:center;font-weight:600;font-size:14px;padding:10px 0}
+
+/* ---------- green hero band ---------- */
+.bhs-hero{position:relative;background:var(--bhs-green);color:#fff;overflow:hidden}
+.bhs-hero .bhs-wrap{padding:48px 24px;display:flex;flex-wrap:wrap;gap:24px;
+  align-items:flex-end;justify-content:space-between;position:relative;z-index:1}
+.bhs-eyebrow{color:var(--bhs-teal);font-size:13px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px}
+.bhs-hero h1{font-size:44px;line-height:1.05}
+.bhs-hero p{opacity:.85;margin:12px 0 0;max-width:36rem}
+.bhs-btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;
+  background:var(--bhs-teal);color:var(--bhs-green-dark);
+  font:inherit;font-weight:600;font-size:14px;padding:12px 20px}
+.bhs-btn:hover{background:#fff}
+/* chevron weave decoration on the right edge */
+.bhs-chevron{position:absolute;top:0;right:0;height:100%;width:110px;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(-45deg, rgba(127,179,172,.55) 0 2px, transparent 2px 10px),
+    repeating-linear-gradient(45deg, rgba(127,179,172,.55) 0 2px, transparent 2px 10px);
+  background-size:100% 50%,100% 50%;
+  background-position:top,bottom;background-repeat:no-repeat}
+
+/* ---------- stat tiles ---------- */
+.bhs-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bhs-border);margin:40px 0}
+.bhs-stat{position:relative;background:#fff;padding:24px}
+.bhs-stat i{position:absolute;left:0;top:0;right:0;height:4px}
+.bhs-stat .lbl{font-size:12px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--bhs-muted)}
+.bhs-stat .val{font-size:36px;font-weight:700;margin-top:8px;font-variant-numeric:tabular-nums}
+
+/* ---------- panel + toolbar ---------- */
+.bhs-panel{border:1px solid var(--bhs-border);background:#fff;margin-bottom:56px}
+.bhs-toolbar{display:flex;flex-wrap:wrap;gap:12px;padding:16px;border-bottom:1px solid var(--bhs-border)}
+.bhs-search{position:relative;flex:1;min-width:220px}
+.bhs-search input{width:100%;padding:10px 14px 10px 38px;font:inherit;font-size:14px;
+  border:1px solid var(--bhs-border);background:#fff}
+.bhs-search input:focus{outline:none;border-color:var(--bhs-teal);
+  box-shadow:0 0 0 3px rgba(127,179,172,.25)}
+.bhs-search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--bhs-muted)}
+.bhs-filters{display:flex;gap:4px;padding:4px;background:var(--bhs-muted-bg)}
+.bhs-filters button{border:0;cursor:pointer;font:inherit;font-size:12px;font-weight:700;
+  padding:6px 12px;background:transparent;color:var(--bhs-muted)}
+.bhs-filters button:hover{color:var(--bhs-fg)}
+.bhs-filters button.active{background:var(--bhs-green);color:#fff}
+
+/* ---------- table ---------- */
+.bhs-scroll{overflow-x:auto}
+table.bhs-table{width:100%;border-collapse:collapse;font-size:14px}
+.bhs-table thead th{background:var(--bhs-muted-bg);color:var(--bhs-muted);
+  text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;padding:12px 20px;white-space:nowrap}
+.bhs-table td{padding:14px 20px;border-top:1px solid var(--bhs-border);white-space:nowrap}
+.bhs-table tbody tr:hover{background:rgba(243,245,244,.6)}
+.bhs-name{display:flex;align-items:center;gap:12px;font-weight:600}
+.bhs-avatar{width:36px;height:36px;flex:none;display:flex;align-items:center;justify-content:center;
+  background:var(--bhs-green);color:#fff;font-size:12px;font-weight:700}
+.num{font-variant-numeric:tabular-nums;color:var(--bhs-muted)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--bhs-muted)}
+.bhs-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;
+  font-size:12px;font-weight:700;border:1px solid}
+.badge-verified{color:var(--bhs-success);border-color:rgba(47,143,107,.4);background:rgba(47,143,107,.1)}
+.badge-late{color:#4d7d75;border-color:rgba(127,179,172,.5);background:rgba(127,179,172,.18)}
+.badge-absent,.badge-flagged{color:var(--bhs-danger);border-color:rgba(192,57,43,.35);background:rgba(192,57,43,.1)}
+.bhs-empty{text-align:center;color:var(--bhs-muted);padding:40px 20px}
+.bhs-footbar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:12px 20px;border-top:1px solid var(--bhs-border);
+  background:rgba(243,245,244,.5);font-size:12px;color:var(--bhs-muted)}
+
+/* ---------- page footer ---------- */
+.bhs-footer{background:var(--bhs-green);color:#fff;font-size:14px}
+.bhs-footer .bhs-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding:40px 24px}
+.bhs-footer .t{color:var(--bhs-teal);font-weight:700;margin-bottom:4px}
+.bhs-footer .r{text-align:right;opacity:.8}
+.bhs-footer .o{opacity:.8}
+
+@media (max-width:900px){
+  .bhs-stats{grid-template-columns:repeat(2,1fr)}
+  .bhs-hero h1{font-size:32px}
+  .bhs-footer .bhs-wrap{grid-template-columns:1fr}
+  .bhs-footer .r{text-align:left}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="bhs-header">
+  <div class="bhs-wrap">
+    <button class="bhs-menu" id="bhsMenuBtn" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      Menu
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+    <a class="bhs-brand" href="/">
+      <svg width="36" height="36" viewBox="0 0 48 48" aria-hidden="true">
+        <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square">
+          <path d="M10 38 L24 14 L38 38"/>
+          <path d="M14 38 L24 21 L34 38" opacity=".75"/>
+          <path d="M18 38 L24 28 L30 38" opacity=".5"/>
+        </g>
+      </svg>
+      <span>
+        <b>Burnside High School</b>
+        <span>Te Kura o Waimairi-iri · Attendance</span>
+      </span>
+    </a>
+  </div>
+  <nav class="bhs-nav" id="bhsNav">
+    <div class="bhs-wrap">
+      <a href="/">Sign in</a>
+      <a href="/student">Student dashboard</a>
+      <a href="/staff">Staff dashboard</a>
+    </div>
+  </nav>
+</header>
+
+<div class="bhs-ribbon">Signed in as {{ teacher_name|default:"Ms. Harper" }} · Year 13 Dean</div>
+
+<!-- ================= HERO ================= -->
+<section class="bhs-hero">
+  <div class="bhs-chevron"></div>
+  <div class="bhs-wrap">
+    <div>
+      <div class="bhs-eyebrow">Period 1 · Today</div>
+      <h1>Year 13 Attendance Dashboard</h1>
+      <p>Live IP-verified check-ins from the school network.</p>
+    </div>
+    <button class="bhs-btn" id="bhsExport">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+      Export CSV
+    </button>
+  </div>
+</section>
+
+<div class="bhs-wrap">
+
+  <!-- ================= STATS ================= -->
+  <section class="bhs-stats">
+    <div class="bhs-stat"><i style="background:var(--bhs-success)"></i><div class="lbl">Verified</div><div class="val" data-count="Verified">0</div></div>
+    <div class="bhs-stat"><i style="background:var(--bhs-teal)"></i><div class="lbl">Late</div><div class="val" data-count="Late">0</div></div>
+    <div class="bhs-stat"><i style="background:var(--bhs-muted)"></i><div class="lbl">Absent</div><div class="val" data-count="Absent">0</div></div>
+    <div class="bhs-stat"><i style="background:var(--bhs-danger)"></i><div class="lbl">Flagged</div><div class="val" data-count="Flagged">0</div></div>
+  </section>
+
+  <!-- ================= TABLE PANEL ================= -->
+  <div class="bhs-panel">
+    <div class="bhs-toolbar">
+      <div class="bhs-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="bhsSearch" type="search" placeholder="Search by name or student ID…">
+      </div>
+      <div class="bhs-filters" id="bhsFilters">
+        <button class="active" data-filter="All">All</button>
+        <button data-filter="Verified">Verified</button>
+        <button data-filter="Late">Late</button>
+        <button data-filter="Absent">Absent</button>
+        <button data-filter="Flagged">Flagged</button>
+      </div>
+    </div>
+
+    <div class="bhs-scroll">
+      <table class="bhs-table" id="bhsTable">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Student ID</th>
+            <th>IP address</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Distance</th>
+            <th>Status</th>
+            <th>Timestamp</th>
+            <th>Study reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in records %}
+          <tr data-name="{{ record.student_name }}"
+              data-id="{{ record.student_code }}"
+              data-status="{{ record.status }}">
+            <td>
+              <div class="bhs-name">
+                <span class="bhs-avatar">{{ record.student_name|slice:":1"|upper }}</span>
+                {{ record.student_name }}
+              </div>
+            </td>
+            <td class="num">{{ record.student_code }}</td>
+            <td class="mono">{{ record.ip }}</td>
+            <td class="num">{{ record.latitude }}</td>
+            <td class="num">{{ record.longitude }}</td>
+            <td class="num">{{ record.distance }}</td>
+            <td>
+              <span class="bhs-badge badge-{{ record.status|lower }}">{{ record.status }}</span>
+            </td>
+            <td class="num">{{ record.timestamp }}</td>
+            <td>{{ record.study_reason|default:"—" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td class="bhs-empty" colspan="9">No attendance records yet.</td></tr>
+          {% endfor %}
+          <tr id="bhsNoMatch" style="display:none"><td class="bhs-empty" colspan="9">No students match those filters.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bhs-footbar">
+      <span id="bhsCount"></span>
+      <span>Flagged rows indicate off-network IPs</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bhs-footer">
+  <div class="bhs-wrap">
+    <div><b>Burnside High School</b><div class="o" style="font-style:italic;font-size:12px">Te Kura o Waimairi-iri</div></div>
+    <div class="o"><div class="t">Period 1 Attendance</div>IP-verified Year 13 study check-in. Student data is handled in line with the school privacy policy.</div>
+    <div class="r">© <span id="bhsYear"></span> Burnside High School</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var rows = Array.prototype.slice.call(
+    document.querySelectorAll('#bhsTable tbody tr[data-name]')
+  );
+  var search = document.getElementById('bhsSearch');
+  var filters = document.getElementById('bhsFilters');
+  var noMatch = document.getElementById('bhsNoMatch');
+  var countEl = document.getElementById('bhsCount');
+  var active = 'All';
+
+  document.getElementById('bhsYear').textContent = new Date().getFullYear();
+
+  // menu toggle
+  var btn = document.getElementById('bhsMenuBtn');
+  btn.addEventListener('click', function () {
+    var nav = document.getElementById('bhsNav');
+    var open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+  });
+
+  // stat tiles
+  document.querySelectorAll('.bhs-stat .val').forEach(function (el) {
+    var s = el.getAttribute('data-count');
+    el.textContent = rows.filter(function (r) {
+      return (r.dataset.status || '').toLowerCase() === s.toLowerCase();
+    }).length;
+  });
+
+  function apply() {
+    var q = (search.value || '').toLowerCase().trim();
+    var shown = 0;
+    rows.forEach(function (r) {
+      var name = (r.dataset.name || '').toLowerCase();
+      var id = (r.dataset.id || '').toLowerCase();
+      var st = (r.dataset.status || '').toLowerCase();
+      var ok = (!q || name.indexOf(q) > -1 || id.indexOf(q) > -1) &&
+               (active === 'All' || st === active.toLowerCase());
+      r.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    });
+    noMatch.style.display = (rows.length && shown === 0) ? '' : 'none';
+    countEl.textContent = shown + ' of ' + rows.length + ' students';
+  }
+
+  search.addEventListener('input', apply);
+  filters.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    filters.querySelectorAll('button').forEach(function (x) { x.classList.remove('active'); });
+    b.classList.add('active');
+    active = b.dataset.filter;
+    apply();
+  });
+
+  // CSV export of visible rows
+  document.getElementById('bhsExport').addEventListener('click', function () {
+    var head = Array.prototype.map.call(document.querySelectorAll('#bhsTable thead th'), function (th) { return th.textContent.trim(); });
+    var lines = [head.join(',')];
+    rows.filter(function (r) { return r.style.display !== 'none'; }).forEach(function (r) {
+      var cells = Array.prototype.map.call(r.children, function (td) {
+        return '"' + td.textContent.trim().replace(/\s+/g, ' ').replace(/"/g, '""') + '"';
+      });
+      lines.push(cells.join(','));
+    });
+    var url = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/csv' }));
+    var a = document.createElement('a');
+    a.href = url; a.download = 'attendance.csv'; a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  apply();
+})();
+</script>
+</body>
+</html>
