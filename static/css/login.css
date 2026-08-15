@@ -181,6 +181,8 @@ body{
 
     background:#eef3ff;
 
+    color:#17332d;
+
     outline:none;
 }
 
@@ -505,4 +507,9 @@ body{
     font-weight:bold;
     border-radius:8px;
     cursor:pointer;
+}
+
+input{
+    color:red !important;
+    -webkit-text-fill-color:red !important;
 }

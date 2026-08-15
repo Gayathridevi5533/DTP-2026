@@ -50,7 +50,7 @@ function checkLocation() {
                     result.style.color = "green";
 
                     // SHOW TEXTBOX
-                    document.getElementById("studyBox").style.display = "block";
+                    //document.getElementById("studyBox").style.display = "block";
 
                     document.getElementById("latitude").value = pos.coords.latitude;
                     document.getElementById("longitude").value = pos.coords.longitude;
