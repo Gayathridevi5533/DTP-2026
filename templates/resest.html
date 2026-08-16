@@ -1,0 +1,49 @@
+<h1>Reset Password</h1>
+<style>
+    .error {
+        color: red;
+        margin-top: 10px;
+    }
+</style>
+
+<form method="POST" onsubmit="return validatePassword()">
+
+    <label>New Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <br><br>
+
+    <label>Confirm Password:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+    <br><br>
+    
+    <div id="errorMessage" class="error"></div>
+
+    <button type="submit">Reset Password</button>
+
+</form>
+
+<script>
+    function validatePassword() {
+
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const errorMessage = document.getElementById("errorMessage");
+
+        errorMessage.textContent = "";
+
+        if (password !== confirmPassword) {
+            errorMessage.textContent = "Passwords do not match.";
+            return false;
+        }
+
+        if (password.length < 8) {
+            errorMessage.textContent =
+                "Password must be at least 8 characters long.";
+            return false;
+        }
+
+        return true;
+    }
+</script>

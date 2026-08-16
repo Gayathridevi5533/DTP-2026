@@ -27,6 +27,7 @@ db.init_app(app)
 login_manager.init_app(app)
 
 login_manager.login_view = "routes.login"
+login_manager.login_message = None
 
 # REGISTER ROUTES
 app.register_blueprint(routes)
