@@ -11,7 +11,7 @@
     <link
         rel="stylesheet"
         href="/static/css/style.css">
-    >
+
 
 </head>
 
@@ -43,21 +43,15 @@
 
     </div>
 
-    <div class="container">
+<div class="container">
+
+    <div class="welcome-row">
 
         <div class="page-header">
 
             <h1>
-                Welcome,!
+                Welcome, {{ current_user.username }}!
             </h1>
-            
-            <h1>Welcome</h1>
-
-            <p>Current User: {{ current_user }}</p>
-
-            <p>Username: {{ current_user.username }}</p>
-
-            <p>Email: {{ current_user.email }}</p>
 
             <p>
                 Record your attendance for today's study period.
@@ -65,12 +59,22 @@
 
         </div>
 
+        <div class="clock-card">
+
+            <h3>Current Time</h3>
+
+            <div id="clock">
+                Loading...
+            </div>
+
+        </div>
+
     </div>
 
 
-    <div class="table-card">
+    <div class="attendance-card">
 
-        <div class="table-header">
+        <div class="attendance-header">
 
             <h2>Study Period Attendance</h2>
 
@@ -82,24 +86,12 @@
 
         <div style="padding:30px;">
 
-            <div class="clock-card">
-
-                <h3>Current Time</h3>
-
-                <div id="clock">
-                    Loading...
-                </div>
-
-            </div>
-
-            <br>
-
             <div class="location-card">
 
                 <h3>Location Verification</h3>
 
                 <div id="locationStatus"
-                    class="status-badge">
+                     class="status-badge">
 
                     Checking location...
 
@@ -107,20 +99,14 @@
 
             </div>
 
-            <br><br>
-
             <button
                 class="import-button"
-                onclick="checkLocation()"
-            >
+                onclick="checkLocation()">
                 Mark Attendance
             </button>
 
-            <br><br>
+            <p id="result" style="display: none;"></p>
 
-            <p id="result"></p>
-
-            <!-- HIDDEN TEXTBOX -->
             <div class="study-reason-card">
 
                 <h3>Study Reason</h3>
@@ -130,11 +116,13 @@
                     id="study_reason"
                     placeholder="What are you working on?"
                 >
+
                 <input
                     type="hidden"
                     id="latitude"
                     value=""
                 >
+
                 <input
                     type="hidden"
                     id="longitude"
@@ -143,90 +131,81 @@
 
                 <button
                     class="import-button"
-                    onclick="submitReason()"
-                >
+                    onclick="submitReason()">
                     Submit Study Reason
                 </button>
 
             </div>
 
-            <div class="table-card">
+        </div>
 
-                <div class="table-header">
+    </div>
 
-                    <h2>My Attendance History</h2>
 
-                    <p>
-                        Previous attendance records
-                    </p>
+    <div class="overall-card">
+
+        <div class="overall-header">
+
+            <h2>Overall Attendance</h2>
+
+        </div>
+
+        <div class="overall-content">
+
+            <div class="attendance-stats">
+
+                <div class="attendance-stat">
+
+                    <span class="stat-icon blue">📅</span>
+
+                    <span class="stat-label">
+                        Total Days
+                    </span>
+
+                    <strong>
+                        100
+                    </strong>
 
                 </div>
 
-                <table>
+                <div class="attendance-stat">
 
-                    <thead>
+                    <span class="stat-icon green">✓</span>
 
-                        <tr>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Time</th>
-                            <th>Distance</th>
-                        </tr>
+                    <span class="stat-label">
+                        Present Days
+                    </span>
 
-                    </thead>
+                    <strong class="present-number">
+                        85
+                    </strong>
 
-                    <tbody>
+                </div>
 
-                        {% for record in attendance_history %}
+                <div class="attendance-stat">
 
-                        <tr>
+                    <span class="stat-icon red">×</span>
 
-                            <td>
-                                {{ record.timestamp.strftime('%d/%m/%Y') }}
-                            </td>
+                    <span class="stat-label">
+                        Absent Days
+                    </span>
 
-                            <td>
-                                {{ record.status }}
-                            </td>
+                    <strong class="absent-number">
+                        15
+                    </strong>
 
-                            <td>
-                                {{ record.timestamp.strftime('%H:%M') }}
-                            </td>
-
-                            <td>
-                                {{ record.distance }}m
-                            </td>
-
-                        </tr>
-
-                        {% endfor %}
-
-                    </tbody>
-
-                </table>
+                </div>
 
             </div>
 
-            <div class="stats-row">
+            <div class="attendance-circle">
 
-                <div class="stat-card">
-                    <h3>Total Records</h3>
-                    <span>15</span>
+                <div class="circle-number">
+                    85%
                 </div>
 
-                <div class="stat-card">
-                    <h3>Present</h3>
-                    <span>12</span>
-                </div>
-
-                <div class="stat-card">
-                    <h3>Late</h3>
-                    <span>2</span>
-                </div>
-
-                <div class="stat-card">
-                    <h3>Absent</h3>
-                    <span>1</span>
+                <div class="circle-label">
+                    Attendance
                 </div>
 
             </div>
@@ -235,7 +214,9 @@
 
     </div>
 
-    <script src="/static/style.js"></script>
+</div>
+
+    <script src="/static/Java Script/style.js"></script>
 
 </body>
 

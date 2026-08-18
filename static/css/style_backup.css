@@ -16,8 +16,6 @@ html,
 body {
     margin: 0;
     padding: 0;
-    width: 100%;
-    min-height: 100%;
 }
 
 
@@ -63,6 +61,7 @@ body {
 ===================================================== */
 
 body {
+
     font-family:
         Arial,
         Helvetica,
@@ -166,14 +165,11 @@ body {
 
 .container {
 
-    width: 100%;
-
     max-width: 1500px;
 
     margin: 0 auto;
 
-    padding: 30px 52px;
-
+    padding: 42px 52px 60px;
 }
 
 
@@ -182,20 +178,32 @@ body {
 ===================================================== */
 
 .page-header {
-    margin-bottom: 0;
+
+    margin-bottom: 30px;
 }
+
 
 .page-header h1 {
+
     margin: 0 0 8px;
+
     font-size: 34px;
+
     font-weight: 700;
+
     color: var(--dark-green);
+
 }
 
+
 .page-header p {
+
     margin: 0;
+
     color: var(--text-grey);
+
     font-size: 16px;
+
 }
 
 
@@ -564,12 +572,18 @@ tbody tr:hover {
 ===================================================== */
 
 .status-badge {
+
     display: inline-flex;
+
     align-items: center;
-    padding: 8px 14px;
+
+    padding: 6px 12px;
+
     border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
+
+    font-size: 12px;
+
+    font-weight: 700;
 }
 
 
@@ -618,24 +632,34 @@ tbody tr:hover {
 ===================================================== */
 
 .import-button {
+
     background-color: var(--dark-green);
+
     color: white;
+
     border: none;
-    border-radius: 6px;
-    padding: 13px 26px;
+
+    border-radius: 5px;
+
+    padding: 12px 24px;
+
     font-size: 15px;
+
     font-weight: 600;
+
     cursor: pointer;
+
     transition:
         background-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+        transform 0.2s ease;
 }
 
+
 .import-button:hover {
+
     background-color: var(--deep-green);
+
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
 
@@ -991,164 +1015,18 @@ tbody tr:hover {
 
 }
 
-
-/* =====================================================
-   STUDY PERIOD ATTENDANCE
-===================================================== */
-
-.attendance-card {
-    background-color: var(--white);
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    margin-bottom: 25px;
+.clock-card{
+    background:#f8fafc;
+    border-left:5px solid #0aa17d;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
 }
 
-.attendance-header {
-    padding: 22px 30px;
-    border-bottom: 1px solid var(--border);
-}
-
-.attendance-header h2 {
-    margin: 0 0 6px;
-    color: var(--dark-green);
-    font-size: 22px;
-}
-
-.attendance-header p {
-    margin: 0;
-    color: var(--text-grey);
-    font-size: 14px;
-}
-
-
-.study-reason-card {
-    margin-top: 28px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border);
-}
-
-.study-reason-card h3 {
-    margin: 0 0 10px;
-    font-size: 16px;
-    color: var(--dark-green);
-}
-
-.study-reason-card input[type="text"] {
-    width: 100%;
-    height: 45px;
-    padding: 0 14px;
-    border: 1px solid #cbd6d2;
-    border-radius: 6px;
-    background-color: white;
-    color: var(--text-dark);
-    font-size: 15px;
-    outline: none;
-    margin-bottom: 15px;
-}
-
-.study-reason-card input[type="text"]:focus {
-    border-color: var(--dark-green);
-    box-shadow: 0 0 0 3px rgba(7, 92, 75, 0.12);
-}
-
-
-/* =====================================================
-   OVERALL ATTENDANCE
-===================================================== */
-
-.overall-card {
-    background-color: var(--white);
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    margin-bottom: 30px;
-}
-
-.overall-header {
-    padding: 22px 30px;
-    border-bottom: 1px solid var(--border);
-}
-
-.overall-header h2 {
-    margin: 0;
-    color: var(--dark-green);
-    font-size: 22px;
-}
-
-.overall-content {
-    padding: 25px 30px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 30px;
-}
-
-.attendance-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    flex: 1;
-}
-
-.attendance-stat {
-    padding: 18px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    text-align: center;
-    background-color: #fafcfb;
-}
-
-.stat-icon {
-    display: block;
-    font-size: 25px;
-    margin-bottom: 8px;
-}
-
-.stat-label {
-    display: block;
-    color: var(--text-grey);
-    font-size: 13px;
-    margin-bottom: 6px;
-}
-
-.attendance-stat strong {
-    display: block;
-    font-size: 27px;
-    color: var(--dark-green);
-}
-
-.present-number {
-    color: #159a70 !important;
-}
-
-.absent-number {
-    color: var(--red) !important;
-}
-
-.attendance-circle {
-    width: 125px;
-    height: 125px;
-    border-radius: 50%;
-    border: 8px solid #dff4ea;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-}
-
-.circle-number {
-    font-size: 25px;
-    font-weight: 700;
-    color: var(--dark-green);
-}
-
-.circle-label {
-    font-size: 12px;
-    color: var(--text-grey);
+#clock{
+    font-size:28px;
+    font-weight:700;
+    color:#005b4f;
 }
 
 .location-card{
@@ -1174,75 +1052,4 @@ tbody tr:hover {
     font-size:36px;
     font-weight:700;
     color:#005b4f;
-}
-
-.welcome-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 30px;
-    margin-bottom: 30px;
-}
-
-.welcome-row .page-header {
-    flex: 1;
-}
-
-.clock-card {
-    width: 255px;
-    background-color: var(--white);
-    border-radius: 10px;
-    padding: 18px 24px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    flex-shrink: 0;
-}
-
-.clock-card h3 {
-    margin: 0 0 6px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-grey);
-}
-
-#clock {
-    font-size: 25px;
-    font-weight: 700;
-    color: var(--dark-green);
-}
-
-.attendance-card {
-    background-color: var(--white);
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    margin-bottom: 30px;
-}
-
-.attendance-header {
-    padding: 24px 30px;
-    border-bottom: 1px solid var(--border);
-}
-
-.attendance-header h2 {
-    margin: 0 0 6px;
-    font-size: 22px;
-    color: var(--dark-green);
-}
-
-.attendance-header p {
-    margin: 0;
-    font-size: 14px;
-    color: var(--text-grey);
-}
-
-.location-card {
-    margin-bottom: 22px;
-}
-
-.location-card h3 {
-    margin: 0 0 10px;
-    font-size: 16px;
-    color: var(--dark-green);
 }
