@@ -1037,15 +1037,19 @@ tbody tr:hover {
 
 .study-reason-card input[type="text"] {
     width: 100%;
-    height: 45px;
+    height: 46px;
     padding: 0 14px;
     border: 1px solid #cbd6d2;
     border-radius: 6px;
-    background-color: white;
+    background-color: #ffffff;
     color: var(--text-dark);
     font-size: 15px;
     outline: none;
     margin-bottom: 15px;
+}
+
+.study-reason-card input[type="text"]::placeholder {
+    color: #9aa7a3;
 }
 
 .study-reason-card input[type="text"]:focus {
@@ -1057,6 +1061,26 @@ tbody tr:hover {
 /* =====================================================
    OVERALL ATTENDANCE
 ===================================================== */
+
+.attendance-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    flex: 1;
+}
+
+.attendance-stat {
+    background-color: #fafcfb;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 15px;
+    text-align: center;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
 .overall-card {
     background-color: var(--white);
@@ -1076,13 +1100,13 @@ tbody tr:hover {
     margin: 0;
     color: var(--dark-green);
     font-size: 22px;
+    font-weight: 700;
 }
 
 .overall-content {
-    padding: 25px 30px;
+    padding: 28px 30px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 30px;
 }
 
@@ -1133,17 +1157,22 @@ tbody tr:hover {
     height: 125px;
     border-radius: 50%;
     border: 8px solid #dff4ea;
+    background-color: white;
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+
     flex-shrink: 0;
 }
 
 .circle-number {
-    font-size: 25px;
+    font-size: 27px;
     font-weight: 700;
+    line-height: 1;
     color: var(--dark-green);
+    margin-bottom: 5px;
 }
 
 .circle-label {
@@ -1245,4 +1274,36 @@ tbody tr:hover {
     margin: 0 0 10px;
     font-size: 16px;
     color: var(--dark-green);
+}
+.stat-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.stat-icon.blue {
+    background-color: #e8eefc;
+    color: var(--blue);
+}
+
+.stat-icon.green {
+    background-color: #dff4ea;
+    color: #08744f;
+}
+
+.stat-icon.red {
+    background-color: #fee5e5;
+    color: var(--red);
+}
+.study-reason-card .import-button {
+    background-color: var(--accent-green);
+}
+
+.study-reason-card .import-button:hover {
+    background-color: var(--dark-green);
 }

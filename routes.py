@@ -149,7 +149,36 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 @login_required
 def home():
 
-    return render_template("index.html")
+    records = Attendance.query.filter_by(
+        student_id=current_user.id
+    ).all()
+
+    total_days = len(records)
+
+    present_days = sum(
+        1 for record in records
+        if record.status == "allowed"
+    )
+
+    absent_days = sum(
+        1 for record in records
+        if record.status == "denied"
+    )
+
+    if total_days > 0:
+        attendance_percentage = round(
+            (present_days / total_days) * 100
+        )
+    else:
+        attendance_percentage = 0
+
+    return render_template(
+        "index.html",
+        total_days=total_days,
+        present_days=present_days,
+        absent_days=absent_days,
+        attendance_percentage=attendance_percentage
+    )
 
 
 # =========================
