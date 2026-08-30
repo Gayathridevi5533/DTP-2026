@@ -20,21 +20,30 @@
     <div class="navbar">
 
         <div class="nav-title">
-            Student Attendance
+
+            <img
+                src="{{ url_for('static', filename='images/burnside-logo.png') }}"
+                alt="Burnside High School Logo"
+                class="school-logo"
+            >
+
+            <span>Student Attendance</span>
+
         </div>
+
 
         <div class="nav-buttons">
 
             <a
                 href="{{ url_for('routes.change_password') }}"
-                class="nav-link"
+                class="nav-button"
             >
                 Change Password
             </a>
 
             <a
                 href="{{ url_for('routes.logout') }}"
-                class="nav-link"
+                class="nav-button"
             >
                 Logout
             </a>
@@ -99,13 +108,13 @@
 
             </div>
 
-            <button
+            <!-- <button
                 class="import-button"
                 onclick="checkLocation()">
                 Mark Attendance
-            </button>
+            </button> -->
 
-            <p id="result" style="display: none;"></p>
+            <p id="result" style="display: block;"></p>
 
             <div class="study-reason-card">
 
@@ -132,7 +141,7 @@
                 <button
                     class="import-button"
                     onclick="submitReason()">
-                    Submit Study Reason
+                    Mark Attendance
                 </button>
 
             </div>
@@ -198,14 +207,43 @@
 
             </div>
 
-            <div class="attendance-circle">
+            <div class="attendance-card">
 
-                <div class="circle-number">
-                    {{ attendance_percentage }}%
+                <h2>Your Attendance</h2>
+
+                <div class="attendance-chart">
+
+                    <div class="attendance-ring">
+
+                        <div class="attendance-inner">
+                            <strong id="attendancePercentage">80%</strong>
+                            <span>Overall</span>
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="circle-label">
-                    Attendance
+
+                <div class="attendance-legend">
+
+                    <div class="legend-item">
+                        <span class="legend-dot present-dot"></span>
+
+                        <span>Present</span>
+
+                        <strong id="presentText">80% (80 days)</strong>
+                    </div>
+
+
+                    <div class="legend-item">
+                        <span class="legend-dot absent-dot"></span>
+
+                        <span>Absent</span>
+
+                        <strong id="absentText">20% (20 days)</strong>
+                    </div>
+
                 </div>
 
             </div>
@@ -217,6 +255,97 @@
 </div>
 
     <script src="/static/Java Script/style.js"></script>
+
+    <script>
+
+        /*
+        * Example attendance data
+        *
+        * Later we will replace these values
+        * with the actual values from Flask/database.
+        */
+
+        const presentDays = 80;
+        const absentDays = 20;
+
+
+        /*
+        * Calculate total attendance
+        */
+
+        const totalDays = presentDays + absentDays;
+
+
+        /*
+        * Calculate percentages
+        */
+
+        let presentPercentage = 0;
+        let absentPercentage = 0;
+
+
+        if (totalDays > 0) {
+
+            presentPercentage =
+                Math.round((presentDays / totalDays) * 100);
+
+            absentPercentage =
+                Math.round((absentDays / totalDays) * 100);
+
+        }
+
+
+        /*
+        * Find the attendance ring
+        */
+
+        const attendanceRing =
+            document.querySelector(".attendance-ring");
+
+
+        /*
+        * Tell the ring how much should be green
+        */
+
+        attendanceRing.style.setProperty(
+            "--present-percent",
+            presentPercentage + "%"
+        );
+
+
+        /*
+        * Display percentage in centre
+        */
+
+        document.getElementById(
+            "attendancePercentage"
+        ).textContent = presentPercentage + "%";
+
+
+        /*
+        * Display Present information
+        */
+
+        document.getElementById(
+            "presentText"
+        ).textContent =
+            presentPercentage + "% (" +
+            presentDays +
+            " days)";
+
+
+        /*
+        * Display Absent information
+        */
+
+        document.getElementById(
+            "absentText"
+        ).textContent =
+            absentPercentage + "% (" +
+            absentDays +
+            " days)";
+
+    </script>
 
 </body>
 

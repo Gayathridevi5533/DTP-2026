@@ -81,82 +81,61 @@ body {
 ===================================================== */
 
 .navbar {
-
-    height: 76px;
-
-    background-color: var(--dark-green);
-
-    color: white;
+    width: 100%;
+    height: 90px;
+    background-color: #005c4f;
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
-    padding: 0 52px;
-
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0 40px;
+    box-sizing: border-box;
 }
 
-
-/* Website title */
-
-.nav-title {
-
-    font-size: 25px;
-
-    font-weight: 700;
-
-    letter-spacing: 0.2px;
-}
-
-
-/* Navigation buttons */
-
-.nav-buttons {
-
+.nav-left {
     display: flex;
-
     align-items: center;
-
-    gap: 8px;
+    gap: 15px;
 }
 
+.school-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
 
-.nav-link {
-
-    text-decoration: none;
-
+.school-name {
+    display: flex;
+    flex-direction: column;
     color: white;
-
-    padding: 12px 20px;
-
-    border-radius: 5px;
-
-    font-size: 15px;
-
-    font-weight: 600;
-
-    transition:
-        background-color 0.2s ease,
-        transform 0.2s ease;
 }
 
-
-.nav-link:hover {
-
-    background-color:
-        rgba(255, 255, 255, 0.12);
-
+.school-name span {
+    font-size: 25px;
+    font-weight: bold;
 }
 
+.school-name small {
+    font-size: 14px;
+    margin-top: 4px;
+}
 
-.nav-link.active {
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
 
-    background-color: var(--accent-green);
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+}
 
+.nav-links a:hover {
+    color: #b8e6d9;
 }
 
 
@@ -1306,4 +1285,179 @@ tbody tr:hover {
 
 .study-reason-card .import-button:hover {
     background-color: var(--dark-green);
+}
+/* =================================
+   ATTENDANCE CARD
+================================= */
+
+.attendance-card {
+    background: white;
+
+    border: 1px solid #d9e3df;
+    border-radius: 12px;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+}
+
+.attendance-card h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+
+    color: #073f38;
+
+    font-size: 22px;
+}
+
+
+/* =================================
+   ATTENDANCE RING
+================================= */
+
+.attendance-chart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 10px 0 30px;
+}
+
+
+/*
+   This is the actual circumference.
+
+   The JavaScript will change
+   --present-percent automatically.
+*/
+
+.attendance-ring {
+
+    --present-percent: 80%;
+
+    width: 230px;
+    height: 230px;
+
+    border-radius: 50%;
+
+    background:
+        conic-gradient(
+            #35a853 0 var(--present-percent),
+            #e53935 var(--present-percent) 100%
+        );
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+
+
+/*
+   White centre of the donut
+*/
+
+.attendance-inner {
+
+    width: 175px;
+    height: 175px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+
+
+.attendance-inner strong {
+
+    font-size: 48px;
+
+    color: #073f38;
+
+    font-weight: 700;
+}
+
+
+.attendance-inner span {
+
+    margin-top: 4px;
+
+    font-size: 17px;
+
+    color: #64746f;
+}
+
+
+/* =================================
+   LEGEND
+================================= */
+
+.attendance-legend {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+.legend-item {
+
+    display: grid;
+
+    grid-template-columns: 18px 1fr auto;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 16px;
+
+    color: #173f39;
+}
+
+
+.legend-item strong {
+    font-weight: 500;
+}
+
+
+.legend-dot {
+
+    width: 14px;
+    height: 14px;
+
+    border-radius: 50%;
+
+    display: inline-block;
+}
+
+
+.present-dot {
+    background-color: #35a853;
+}
+
+
+.absent-dot {
+    background-color: #e53935;
+}
+
+
+#presentText {
+    color: #35a853;
+}
+
+
+#absentText {
+    color: #e53935;
 }

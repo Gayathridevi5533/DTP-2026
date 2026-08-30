@@ -1,6 +1,6 @@
 from extensions import db, mail
 from math import radians, sin, cos, sqrt, atan2
-from datetime import datetime
+from datetime import datetime, date, time
 from flask_mail import Message
 from flask import request
 import secrets
@@ -29,8 +29,9 @@ def load_user(user_id):
     return Student.query.get(int(user_id))
 
 
-
-
+# =========================
+# DATABASE MODEL
+# =========================
 class Student(UserMixin, db.Model):
 
     id = db.Column(
@@ -63,13 +64,56 @@ class Student(UserMixin, db.Model):
     )
 
     reset_token = db.Column(
-    db.String(200)
+        db.String(200)
     )
 
 
-# =========================
-# DATABASE MODEL
-# =========================
+class Schedule(db.Model):
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    start_date = db.Column(
+        db.Date,
+        nullable=False
+    )
+
+    end_date = db.Column(
+        db.Date,
+        nullable=False
+    )
+
+    week = db.Column(
+        db.String(1),
+        nullable=False
+    )
+
+    day = db.Column(
+        db.String(10),
+        nullable=False
+    )
+
+    start_time = db.Column(
+        db.Time,
+        nullable=False
+    )
+
+    end_time = db.Column(
+        db.Time,
+        nullable=False
+    )
+
+    class_code = db.Column(
+        db.String(50),
+        nullable=False
+    )
+
+    teacher = db.Column(
+        db.String(50)
+    )
+
 
 class Attendance(db.Model):
 
@@ -215,13 +259,53 @@ def verify_location():
         # "id": attendance_id
 })
 
+
+@routes.route("/check_schedule")
+@login_required
+def check_schedule():
+
+    now = datetime.now()
+
+    today = now.date()
+    current_time = now.time()
+    day_name = now.strftime("%A")
+
+    print("Schedule date:", today)
+    print("Schedule time:", current_time)
+    print("Schedule day:", day_name)
+
+    schedule = Schedule.query.filter(
+        Schedule.start_date <= today,
+        Schedule.end_date >= today,
+        Schedule.day == day_name,
+        Schedule.start_time <= current_time,
+        Schedule.end_time >= current_time
+    ).first()
+
+    if schedule:
+        return jsonify({
+            "status": "allowed",
+            "message": "Attendance is available."
+        })
+
+    return jsonify({
+        "status": "denied",
+        "message": "Attendance is not available at this time."
+    })
+
+
 @routes.route("/submit_reason", methods=["POST"])
+@login_required
 def submit_reason():
 
     data = request.get_json()
 
     user_lat = data.get("lat")
     user_lon = data.get("lon")
+
+    # =========================
+    # CHECK LOCATION
+    # =========================
 
     dist = calculate_distance(
         user_lat,
@@ -231,15 +315,63 @@ def submit_reason():
     )
 
     if dist <= MAX_DISTANCE:
-        status = "denied"
-    else:
         status = "allowed"
+    else:
+        status = "denied"
+
+    # =========================
+    # CHECK SCHEDULE
+    # =========================
+
+    now = datetime.now()
+
+    today = now.date()
+    current_time = now.time()
+
+    day_name = now.strftime("%A")
+
+    schedule = Schedule.query.filter(
+        Schedule.start_date <= today,
+        Schedule.end_date >= today,
+        Schedule.day == day_name,
+        Schedule.start_time <= current_time,
+        Schedule.end_time >= current_time
+    ).first()
+
+    # =========================
+    # DENY IF NOT SCHEDULED
+    # =========================
+
+    if not schedule:
+
+        return jsonify({
+            "status": "denied",
+            "reason": "schedule",
+            "message": "Attendance is not available at this time."
+        }), 403
+
+    # =========================
+    # DENY IF OUTSIDE SCHOOL
+    # =========================
+
+    if status == "denied":
+
+        return jsonify({
+            "status": "denied",
+            "reason": "location",
+            "message": "You are outside the allowed school location."
+        }), 403
+
+    # =========================
+    # SAVE ATTENDANCE
+    # =========================
 
     ip = request.remote_addr
 
     study_reason = data.get("study_reason")
 
     new_attendance = Attendance(
+
         student_name=current_user.username,
 
         student_email=current_user.email,
@@ -256,24 +388,20 @@ def submit_reason():
 
         distance=dist,
 
-        status=status,
+        status="allowed",
 
         study_reason=study_reason
     )
 
     db.session.add(new_attendance)
+
     db.session.commit()
 
     return jsonify({
-        "message": "saved"
+        "status": "allowed",
+        "message": "Attendance saved successfully."
     })
 
-    db.session.add(new_attendance)
-    db.session.commit()
-    attendance_id = new_attendance.id    
-    return jsonify({
-         "message": "not found"
-    })
 
 @routes.route("/teacher")
 def teacher():
