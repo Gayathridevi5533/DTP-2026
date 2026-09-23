@@ -25,10 +25,13 @@
                 Dashboard
             </a>
 
-            <a href="/import-students" class="nav-link">
+            <a href="/import_students" class="nav-link">
                 Import Student Roll
             </a>
 
+            <a href="/import_schedule" class="nav-link">
+                Import Schedule
+            </a>
         </div>
 
     </nav>
@@ -59,12 +62,12 @@
 
                 <select id="classFilter">
                     <option value="all">All Classes</option>
-                    <option value="class1">Study Class 1</option>
-                    <option value="class2">Study Class 2</option>
-                    <option value="class3">Study Class 3</option>
-                    <option value="class4">Study Class 4</option>
-                    <option value="class5">Study Class 5</option>
-                    <option value="class6">Study Class 6</option>
+                    <option value="sty1">Study Class 1</option>
+                    <option value="sty2">Study Class 2</option>
+                    <option value="sty3">Study Class 3</option>
+                    <option value="sty4">Study Class 4</option>
+                    <option value="sty5">Study Class 5</option>
+                    <option value="sty6">Study Class 6</option>
                 </select>
 
             </div>
@@ -84,10 +87,6 @@
 
                     <option value="present">
                         Present
-                    </option>
-
-                    <option value="late">
-                        Late
                     </option>
 
                     <option value="absent">
@@ -209,105 +208,83 @@
 
                     <tbody>
 
-                        {% for record in records %}
+                        {% for student in students %}
 
-                        <tr
-                            class="student-row"
-                            data-class="{{ record.study_class|default('class1')|lower|replace(' ', '') }}"
-                            data-status="{{ record.status|default('absent')|lower }}"
-                            data-name="{{ record.student_name|default('')|lower }}"
-                            data-id="{{ record.student_code|default('') }}"
-                        >
+                            {% set record = attendance_by_student.get(student.id) %}
 
-                            <td>
+                            <tr
+                                class="student-row"
+                                data-class="{{ student.student_class|default('')|lower|replace(' ', '') }}"
+                                data-status="{{ record.status|default('absent')|lower if record else 'absent' }}"
+                                data-name="{{ student.username|default('')|lower }}"
+                                data-id="{{ student.student_code|default('') }}"
+                            >
 
-                                <div class="student-name">
-                                    {{ record.student_name or "Unknown Student" }}
-                                </div>
+                                <td>
+                                    <div class="student-name">
+                                        {{ student.username }}
+                                    </div>
+                                </td>
 
-                            </td>
+                                <td>
+                                    {{ student.student_code }}
+                                </td>
 
+                                <td>
+                                    {{ student.student_class|default("Not assigned") }}
+                                </td>
 
-                            <td>
-                                {{ record.student_code }}
-                            </td>
+                                <td>
 
+                                    {% if record and record.status|lower == "allowed" %}
 
-                            <td>
-                                {{ record.study_class|default("Not assigned") }}
-                            </td>
+                                        <span class="status-badge present-badge">
+                                            Present
+                                        </span>
 
+                                    {% elif record and record.status|lower == "late" %}
 
-                            <td>
+                                        <span class="status-badge late-badge">
+                                            Late
+                                        </span>
 
-                                {% if record.status|lower == "allowed" %}
+                                    {% elif record and record.status|lower == "denied" %}
 
-                                    <span class="status-badge present-badge">
-                                        Present
-                                    </span>
+                                        <span class="status-badge denied-badge">
+                                            Denied
+                                        </span>
 
-                                {% elif record.status|lower == "late" %}
+                                    {% else %}
 
-                                    <span class="status-badge late-badge">
-                                        Late
-                                    </span>
+                                        <span class="status-badge absent-badge">
+                                            Absent
+                                        </span>
 
-                                {% elif record.status|lower == "denied" %}
+                                    {% endif %}
 
-                                    <span class="status-badge denied-badge">
-                                        Denied
-                                    </span>
+                                </td>
 
-                                {% else %}
+                                <td class="timestamp">
+                                    {{ record.timestamp if record else "—" }}
+                                </td>
 
-                                    <span class="status-badge absent-badge">
-                                        Absent
-                                    </span>
+                                <td>
+                                    {% if record and record.study_reason %}
+                                        {{ record.study_reason }}
+                                    {% else %}
+                                        <span class="muted">—</span>
+                                    {% endif %}
+                                </td>
 
-                                {% endif %}
-
-                            </td>
-
-
-                            <td class="timestamp">
-
-                                {{ record.timestamp or "—" }}
-
-                            </td>
-
-
-                            <td>
-
-                                {% if record.study_reason %}
-
-                                    {{ record.study_reason }}
-
-                                {% else %}
-
-                                    <span class="muted">
+                                <td>
+                                    {% if record and record.distance %}
+                                        {{ "%.1f"|format(record.distance|float) }} m
+                                    {% else %}
                                         —
-                                    </span>
+                                    {% endif %}
+                                </td>
 
-                                {% endif %}
-
-                            </td>
-
-
-                            <td>
-
-                                {% if record.distance %}
-
-                                    {{ "%.1f"|format(record.distance|float) }} m
-
-                                {% else %}
-
-                                    —
-
-                                {% endif %}
-
-                            </td>
-
-                        </tr>
+                            </tr>
 
                         {% endfor %}
 

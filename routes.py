@@ -406,11 +406,18 @@ def submit_reason():
 @routes.route("/teacher")
 def teacher():
 
+    students = Student.query.all()
     records = Attendance.query.all()
+
+    attendance_by_student = {}
+
+    for record in records:
+        attendance_by_student[record.student_id] = record
 
     return render_template(
         "teacher.html",
-        records=records
+        students=students,
+        attendance_by_student=attendance_by_student
     )
 
 @routes.route("/login", methods=["GET", "POST"])
@@ -418,7 +425,7 @@ def login():
     error = None
     if request.method == "POST":
 
-        username = request.form.get("username")
+        username = request.form.get("student_code")
 
         password = request.form.get("password")
 
@@ -784,3 +791,114 @@ def change_password():
         return redirect(url_for('routes.login'))
 
     return render_template('change_password.html')
+
+
+@routes.route("/import_schedule", methods=["GET", "POST"])
+def import_schedule():
+
+    if request.method == "POST":
+
+        # Delete existing schedule records
+        Schedule.query.delete()
+        db.session.commit()
+
+        file = request.files["csv_file"]
+
+        csv_file = TextIOWrapper(
+            file,
+            encoding="utf-8"
+        )
+
+        reader = csv.DictReader(csv_file)
+
+        imported = 0
+        errors = []
+
+        for row_number, row in enumerate(reader, start=2):
+
+            try:
+                # Get values from CSV
+                start_date_text = row.get("start_date", "").strip()
+                end_date_text = row.get("end_date", "").strip()
+                week = row.get("week", "").strip()
+                day = row.get("day", "").strip()
+                start_time_text = row.get("start_time", "").strip()
+                end_time_text = row.get("end_time", "").strip()
+                class_code = row.get("class_code", "").strip()
+                teacher = row.get("teacher", "").strip()
+
+                # Check required fields
+                if (
+                    not start_date_text
+                    or not end_date_text
+                    or not week
+                    or not day
+                    or not start_time_text
+                    or not end_time_text
+                    or not class_code
+                ):
+                    errors.append(
+                        f"Row {row_number}: Missing required data."
+                    )
+                    continue
+
+                # Check week
+                if week not in ["A", "B"]:
+                    errors.append(
+                        f"Row {row_number}: Week must be A or B."
+                    )
+                    continue
+
+                # Convert dates from CSV strings to Python date objects
+                start_date = datetime.strptime(
+                    start_date_text,
+                    "%Y-%m-%d"
+                ).date()
+
+                end_date = datetime.strptime(
+                    end_date_text,
+                    "%Y-%m-%d"
+                ).date()
+
+                # Convert times from CSV strings to Python time objects
+                start_time = datetime.strptime(
+                    start_time_text,
+                    "%H:%M:%S"
+                ).time()
+
+                end_time = datetime.strptime(
+                    end_time_text,
+                    "%H:%M:%S"
+                ).time()
+
+                # Create schedule record
+                new_schedule = Schedule(
+                    start_date=start_date,
+                    end_date=end_date,
+                    week=week,
+                    day=day,
+                    start_time=start_time,
+                    end_time=end_time,
+                    class_code=class_code,
+                    teacher=teacher
+                )
+
+                db.session.add(new_schedule)
+
+                imported += 1
+
+            except ValueError as e:
+
+                errors.append(
+                    f"Row {row_number}: Invalid date or time format. {e}"
+                )
+
+        db.session.commit()
+
+        return f"""
+        Imported: {imported}<br>
+        Errors: {len(errors)}<br><br>
+        {'<br>'.join(errors)}
+        """
+
+    return render_template("import_schedule.html")

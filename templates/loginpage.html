@@ -40,24 +40,34 @@
                 Sign in to verify your attendance
             </p>
 
-            <form method="POST">
+            <form method="POST"> 
+ 
+                <label for="student_code">Student ID</label> 
+            
+                <input 
+                    type="text" 
+                    id="student_code" 
+                    name="student_code" 
+                    required 
+                > 
+            
+                <label for="password">Password</label>
 
-                <label>Student ID</label>
+                <div class="password-input">
 
-                <input type="text"
-                        name="student_code"
-                        required>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                    >
 
-                <label>Password</label>
-
-                <input type="password"
-                        name="password"
-                        required>
-
-                <button type="submit">
-                    Sign In & Record Attendance
-                </button>
-
+                </div>
+            
+                <button type="submit"> 
+                    Sign In & Record Attendance 
+                </button> 
+            
             </form>
 
             <a href="{{ url_for('routes.forgot_password') }}">
