@@ -1,0 +1,210 @@
+/* ---------- GENERAL ---------- */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+
+/* ---------- NAVBAR ---------- */
+
+.navbar{
+    background:#198754;
+    color:white;
+    padding:15px 30px;
+}
+
+.navbar-content{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    height:60px;
+    width:auto;
+}
+
+.navbar h2{
+    font-size:24px;
+    font-weight:600;
+}
+
+
+/* ---------- MAIN LOGIN SECTION ---------- */
+
+.login-container{
+    flex:1;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    gap:50px;
+
+    padding:40px;
+}
+
+
+/* ---------- IMAGE ---------- */
+
+.login-image{
+    flex:1;
+    max-width:700px;
+}
+
+.login-image img{
+    width:100%;
+    border-radius:25px;
+    object-fit:cover;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.15);
+}
+
+
+/* ---------- LOGIN CARD ---------- */
+
+.login-card{
+    width:450px;
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:20px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.login-card h1{
+    color:#198754;
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+    font-size:42px;
+}
+
+
+/* ---------- FORM ---------- */
+
+.login-card label{
+    display:block;
+
+    margin-bottom:8px;
+    margin-top:15px;
+
+    font-weight:bold;
+}
+
+.login-card input{
+    width:100%;
+
+    padding:12px;
+
+    border:2px solid #dddddd;
+
+    border-radius:10px;
+
+    font-size:16px;
+}
+
+.login-card input:focus{
+    outline:none;
+    border-color:#198754;
+}
+
+
+/* ---------- BUTTON ---------- */
+
+.login-card button{
+    width:100%;
+
+    margin-top:25px;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#198754;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+.login-card button:hover{
+    background:#146c43;
+}
+
+
+/* ---------- FORGOT PASSWORD ---------- */
+
+.login-card a{
+    display:block;
+
+    text-align:center;
+
+    margin-top:20px;
+
+    text-decoration:none;
+
+    color:#198754;
+}
+
+.login-card a:hover{
+    text-decoration:underline;
+}
+
+
+/* ---------- FOOTER ---------- */
+
+footer{
+    background:#212529;
+
+    color:white;
+
+    text-align:center;
+
+    padding:15px;
+}
+
+
+/* ---------- MOBILE ---------- */
+
+@media(max-width:1000px){
+
+    .login-container{
+        flex-direction:column;
+    }
+
+    .login-card{
+        width:100%;
+        max-width:450px;
+    }
+
+    .login-image{
+        width:100%;
+    }
+}
+.subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:25px;
+}

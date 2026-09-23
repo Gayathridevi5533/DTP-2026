@@ -439,7 +439,7 @@ def login():
         else:
             error = "Invalid username or password."
 
-    return render_template("login.html", error=error)
+    return render_template("loginpage.html", error=error)
 
 
 @routes.route("/logout")
