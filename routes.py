@@ -423,14 +423,15 @@ def teacher():
 @routes.route("/login", methods=["GET", "POST"])
 def login():
     error = None
+
     if request.method == "POST":
 
-        username = request.form.get("student_code")
+        email = request.form.get("student_code")
 
         password = request.form.get("password")
 
         user = Student.query.filter_by(
-            student_code=username
+            email=email
         ).first()
 
         if user and check_password_hash(
@@ -446,7 +447,10 @@ def login():
         else:
             error = "Invalid username or password."
 
-    return render_template("loginpage.html", error=error)
+    return render_template(
+        "loginpage.html",
+        error=error
+    )
 
 
 @routes.route("/logout")
