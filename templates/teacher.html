@@ -7,7 +7,7 @@
 
     <title>Teacher Attendance Dashboard</title>
 
-  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/teacher.css">
 </head>
 
 <body>
@@ -15,23 +15,36 @@
     <!-- Navigation -->
     <nav class="navbar">
 
-        <div class="nav-title">
-            Teacher Attendance
+        <div class="navbar-brand">
+
+            <img
+                src="/static/images/burnside-logo.png"
+                alt="Burnside Logo"
+                class="school-logo"
+            >
+
+            <div class="navbar-title">
+                Teacher Attendance
+            </div>
+
         </div>
 
-        <div class="nav-buttons">
+        <div class="navbar-links">
 
-            <a href="/teacher" class="nav-link active">
-                Dashboard
-            </a>
-
-            <a href="/import_students" class="nav-link">
+            <a
+                href="/import_students"
+                class="nav-button"
+            >
                 Import Student Roll
             </a>
 
-            <a href="/import_schedule" class="nav-link">
+            <a
+                href="/import_schedule"
+                class="nav-button"
+            >
                 Import Schedule
             </a>
+
         </div>
 
     </nav>
@@ -54,49 +67,54 @@
         <!-- Controls -->
         <section class="controls-card">
 
+            
             <div class="control-group">
+                <label id="classFilterLabel">Study Class</label>
 
-                <label for="classFilter">
-                    Study Class
-                </label>
+                <div class="custom-select" data-select="classFilter">
+                    <button type="button"
+                            class="custom-select-trigger"
+                            aria-labelledby="classFilterLabel"
+                            aria-expanded="false">
+                        <span class="selected-text">All Classes</span>
+                        <span class="custom-arrow"></span>
+                    </button>
 
-                <select id="classFilter">
-                    <option value="all">All Classes</option>
-                    <option value="sty1">Study Class 1</option>
-                    <option value="sty2">Study Class 2</option>
-                    <option value="sty3">Study Class 3</option>
-                    <option value="sty4">Study Class 4</option>
-                    <option value="sty5">Study Class 5</option>
-                    <option value="sty6">Study Class 6</option>
-                </select>
+                    <div class="custom-options" role="listbox" hidden></div>
 
+                    <select id="classFilter" class="native-select-hidden" tabindex="-1" aria-hidden="true">
+                        <option value="all">All Classes</option>
+                        <option value="sty1">Study Class 1</option>
+                        <option value="sty2">Study Class 2</option>
+                        <option value="sty3">Study Class 3</option>
+                        <option value="sty4">Study Class 4</option>
+                        <option value="sty5">Study Class 5</option>
+                        <option value="sty6">Study Class 6</option>
+                    </select>
+                </div>
             </div>
-
-
+            
             <div class="control-group">
+                <label id="statusFilterLabel">Attendance Status</label>
 
-                <label for="statusFilter">
-                    Attendance Status
-                </label>
+                <div class="custom-select" data-select="statusFilter">
+                    <button type="button"
+                            class="custom-select-trigger"
+                            aria-labelledby="statusFilterLabel"
+                            aria-expanded="false">
+                        <span class="selected-text">All Students</span>
+                        <span class="custom-arrow"></span>
+                    </button>
 
-                <select id="statusFilter">
+                    <div class="custom-options" role="listbox" hidden></div>
 
-                    <option value="all">
-                        All Students
-                    </option>
-
-                    <option value="present">
-                        Present
-                    </option>
-
-                    <option value="absent">
-                        Absent
-                    </option>
-
-                </select>
-
+                    <select id="statusFilter" class="native-select-hidden" tabindex="-1" aria-hidden="true">
+                        <option value="all">All Students</option>
+                        <option value="present">Present</option>
+                        <option value="absent">Absent</option>
+                    </select>
+                </div>
             </div>
-
 
             <div class="control-group search-group">
 
@@ -142,20 +160,6 @@
                 </div>
 
             </div>
-
-
-            <div class="summary-card late">
-
-                <div class="summary-title">
-                    Late
-                </div>
-
-                <div class="summary-number" id="lateCount">
-                    0
-                </div>
-
-            </div>
-
 
             <div class="summary-card absent">
 
@@ -214,7 +218,7 @@
 
                             <tr
                                 class="student-row"
-                                data-class="{{ student.student_class|default('')|lower|replace(' ', '') }}"
+                                data-class="{{ student.student_class|default('')|lower|replace('study class', 'sty')|replace(' ', '') }}"
                                 data-status="{{ record.status|default('absent')|lower if record else 'absent' }}"
                                 data-name="{{ student.username|default('')|lower }}"
                                 data-id="{{ student.student_code|default('') }}"
@@ -425,9 +429,6 @@
             document.getElementById("presentCount")
                 .textContent = present;
 
-            document.getElementById("lateCount")
-                .textContent = late;
-
             document.getElementById("absentCount")
                 .textContent = absent;
 
@@ -448,7 +449,148 @@
             "input",
             filterStudents
         );
+        
+        /* CUSTOM DROPDOWN BEHAVIOUR */
 
+        document.querySelectorAll(".custom-select").forEach(dropdown => {
+            const select = document.getElementById(
+                dropdown.dataset.select
+            );
+
+            const trigger = dropdown.querySelector(
+                ".custom-select-trigger"
+            );
+
+            const selectedText = dropdown.querySelector(
+                ".selected-text"
+            );
+
+            const optionsContainer = dropdown.querySelector(
+                ".custom-options"
+            );
+
+            function closeDropdown() {
+                dropdown.classList.remove("open");
+                optionsContainer.hidden = true;
+                trigger.setAttribute("aria-expanded", "false");
+            }
+
+            function openDropdown() {
+                document.querySelectorAll(".custom-select").forEach(other => {
+                    if (other !== dropdown) {
+                        other.classList.remove("open");
+                        other.querySelector(".custom-options").hidden = true;
+                        other.querySelector(".custom-select-trigger")
+                            .setAttribute("aria-expanded", "false");
+                    }
+                });
+
+                dropdown.classList.add("open");
+                optionsContainer.hidden = false;
+                trigger.setAttribute("aria-expanded", "true");
+
+                const selectedOption = optionsContainer.querySelector(
+                    '[data-value="' + select.value + '"]'
+                );
+
+                if (selectedOption) {
+                    selectedOption.focus();
+                }
+            }
+
+            function buildOptions() {
+                optionsContainer.replaceChildren();
+
+                Array.from(select.options).forEach(option => {
+                    const button = document.createElement("button");
+
+                    button.type = "button";
+                    button.className = "custom-option";
+                    button.textContent = option.textContent.trim();
+                    button.dataset.value = option.value;
+                    button.setAttribute("role", "option");
+
+                    button.addEventListener("click", () => {
+                        select.value = option.value;
+
+                        selectedText.textContent = option.textContent.trim();
+
+                        select.dispatchEvent(
+                            new Event("change", { bubbles: true })
+                        );
+
+                        closeDropdown();
+                        updateSelectedOption();
+                        trigger.focus();
+                    });
+
+                    optionsContainer.appendChild(button);
+                });
+
+                updateSelectedOption();
+            }
+
+            function updateSelectedOption() {
+                optionsContainer.querySelectorAll(".custom-option").forEach(button => {
+                    const isSelected = button.dataset.value === select.value;
+
+                    button.classList.toggle("selected", isSelected);
+                    button.setAttribute("aria-selected", String(isSelected));
+                });
+
+                const option = select.options[select.selectedIndex];
+
+                if (option) {
+                    selectedText.textContent = option.textContent.trim();
+                }
+            }
+
+            trigger.addEventListener("click", () => {
+                if (dropdown.classList.contains("open")) {
+                    closeDropdown();
+                } else {
+                    openDropdown();
+                }
+            });
+
+            trigger.addEventListener("keydown", event => {
+                if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    openDropdown();
+                }
+            });
+
+            optionsContainer.addEventListener("keydown", event => {
+                const options = Array.from(
+                    optionsContainer.querySelectorAll(".custom-option")
+                );
+
+                const currentIndex = options.indexOf(document.activeElement);
+
+                if (event.key === "ArrowDown") {
+                    event.preventDefault();
+                    options[Math.min(currentIndex + 1, options.length - 1)]?.focus();
+                } else if (event.key === "ArrowUp") {
+                    event.preventDefault();
+                    options[Math.max(currentIndex - 1, 0)]?.focus();
+                } else if (event.key === "Escape") {
+                    closeDropdown();
+                    trigger.focus();
+                } else if (event.key === "Tab") {
+                    closeDropdown();
+                }
+            });
+
+            document.addEventListener("click", event => {
+                if (!dropdown.contains(event.target)) {
+                    closeDropdown();
+                }
+            });
+
+            select.addEventListener("change", updateSelectedOption);
+
+            buildOptions();
+        });
 
         // Run when page first loads
         filterStudents();
