@@ -337,3 +337,70 @@ footer p {
         font-size: 34px;
     }
 }
+/* =========================
+   PAGE FOOTER
+========================= */
+
+.teacher-footer {
+    width: 100%;
+    margin: 0;
+    padding: 24px 20px;
+
+    background: #00594f;
+    color: #ffffff;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.teacher-footer p {
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 0;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.teacher-footer span {
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 0;
+
+    color: #d5e9e4;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    line-height: 1.5;
+}
+
+.teacher-footer .footer-accent {
+    display: block;
+    flex-shrink: 0;
+
+    width: 42px;
+    height: 3px;
+    margin: 16px 0 0;
+
+    background: #8fc8b8;
+    border-radius: 2px;
+}
+
+@media (max-width: 600px) {
+    .teacher-footer {
+        padding: 20px 14px;
+    }
+
+    .teacher-footer p {
+        font-size: 15px;
+    }
+}
