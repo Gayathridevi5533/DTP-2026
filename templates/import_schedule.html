@@ -6,50 +6,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
 <title>Import Schedule</title>
 
 <link rel="stylesheet" href="/static/css/style.css">
-```
 
 </head>
 
-<body>
+<body class="import-schedule-page">
 
-```
+
 <!-- =========================
      NAVBAR
 ========================== -->
 
+
+<!-- TOP NAVBAR -->
 <nav class="navbar">
 
-    <div class="nav-title">
-        Teacher Attendance
+    <div class="navbar-left">
+        <img
+            src="{{ url_for('static', filename='images/burnside-logo.png') }}"
+            alt="Burnside High School Logo"
+            class="school-logo"
+        >
+
+        <span class="navbar-title">Teacher Attendance</span>
     </div>
 
-    <div class="nav-buttons">
-
-        <a
-            href="{{ url_for('routes.teacher') }}"
-            class="nav-link"
-        >
+    <div class="navbar-right">
+        <a href="{{ url_for('routes.teacher') }}"
+           class="nav-button">
             Dashboard
         </a>
 
-        <a
-            href="{{ url_for('routes.import_students') }}"
-            class="nav-link"
-        >
+        <a href="{{ url_for('routes.import_students') }}"
+           class="nav-button">
             Import Student Roll
         </a>
-
-        <a
-            href="{{ url_for('routes.import_schedule') }}"
-            class="nav-link active"
-        >
-            Import Schedule
-        </a>
-
     </div>
 
 </nav>
@@ -151,7 +144,12 @@
     </div>
 
 </main>
-```
+
+<!-- PAGE FOOTER -->
+<footer class="import-page-footer">
+    <p>&copy; 2026 Burnside High School</p>
+    <span>Attendance Verification System</span>
+</footer>
 
 </body>
 
