@@ -1,0 +1,202 @@
+/* =========================
+   BURNSIDE ERROR PAGES
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f5;
+    color: #17332d;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.error-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 40px;
+    background: #00594f;
+}
+
+.error-logo {
+    display: block;
+    width: auto;
+    height: 90px;
+    object-fit: contain;
+}
+
+.error-brand {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.error-main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.error-card {
+    width: 100%;
+    max-width: 600px;
+    padding: 45px 35px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #dce4e1;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.error-number {
+    margin: 0;
+    color: #08745d;
+    font-size: 86px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.error-title {
+    margin: 18px 0 12px;
+    color: #075c4b;
+    font-size: 28px;
+}
+
+.error-message {
+    margin: 0;
+    color: #66736f;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* =========================
+   RETURN BUTTON
+========================= */
+
+.error-button {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 13px 25px;
+    border: 2px solid #00594f;
+    border-radius: 6px;
+    background: #00594f;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.error-button:hover {
+    background: #064c3f;
+    border-color: #064c3f;
+    transform: translateY(-2px);
+}
+
+.error-button:focus-visible {
+    outline: 3px solid #0b8068;
+    outline-offset: 4px;
+}
+
+
+/* =========================================
+   PAGE FOOTER — MATCH OTHER APP PAGES
+========================================= */
+
+.error-footer {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 30px;
+    padding: 32px 20px;
+    background-color: #00594f;
+    color: #ffffff;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.error-footer p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.error-footer span {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #d5e9e4;
+}
+
+@media (max-width: 600px) {
+    .error-footer {
+        padding: 24px 14px;
+    }
+
+    .error-footer p {
+        font-size: 17px;
+    }
+
+    .error-footer span {
+        font-size: 13px;
+    }
+}
+
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 600px) {
+    .error-header {
+        padding: 15px 20px;
+        gap: 12px;
+    }
+
+    .error-logo {
+        height: 45px;
+    }
+
+    .error-brand {
+        font-size: 17px;
+    }
+
+    .error-card {
+        padding: 35px 22px;
+    }
+
+    .error-number {
+        font-size: 68px;
+    }
+
+    .error-title {
+        font-size: 23px;
+    }
+
+    .error-message {
+        font-size: 15px;
+    }
+}

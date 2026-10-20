@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/error.css') }}">
+</head>
+
+<body>
+    <header class="error-header">
+        <img class="error-logo"
+             src="{{ url_for('static', filename='images/burnside-logo.png') }}"
+             alt="Burnside High School logo">
+        <span class="error-brand">Attendance Verification System</span>
+    </header>
+
+    <main class="error-main">
+        <section class="error-card">
+            <h2 class="error-number">404</h2>
+            <h1 class="error-title">Page Not Found</h1>
+
+            <p class="error-message">
+                Sorry, we couldn't find the page you're looking for.
+                Please check the address and try again.
+            </p>
+
+            <a class="error-button" href="{{ url_for('routes.login') }}">
+                Return to Login
+            </a>
+        </section>
+    </main>
+
+    
+    <footer class="error-footer">
+        <p>&copy; 2026 Burnside High School</p>
+        <span>Attendance Verification System</span>
+    </footer>
+
+</body>
+</html>

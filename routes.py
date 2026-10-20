@@ -908,3 +908,18 @@ def import_schedule():
         """
 
     return render_template("import_schedule.html")
+
+@routes.app_errorhandler(404)
+def page_not_found(error):
+    return render_template("404.html"), 404
+
+
+@routes.app_errorhandler(500)
+def internal_server_error(error):
+    db.session.rollback()
+    return render_template("500.html"), 500
+
+
+@routes.app_errorhandler(505)
+def http_version_not_supported(error):
+    return render_template("505.html"), 505

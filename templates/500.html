@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Internal Server Error</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/error.css') }}">
+</head>
+
+<body>
+    <header class="error-header">
+        <img class="error-logo"
+             src="{{ url_for('static', filename='images/burnside-logo.png') }}"
+             alt="Burnside High School logo">
+        <span class="error-brand">Attendance Verification System</span>
+    </header>
+
+    <main class="error-main">
+        <section class="error-card">
+            <h2 class="error-number">500</h2>
+            <h1 class="error-title">Something Went Wrong</h1>
+
+            <p class="error-message">
+                We're sorry, but the system encountered an unexpected
+                error. Please try again later.
+            </p>
+
+            <a class="error-button" href="{{ url_for('routes.login') }}">
+                Return to Login
+            </a>
+        </section>
+    </main>
+
+    <footer class="error-footer">
+        <p>&copy; 2026 Burnside High School | Attendance Verification System</p>
+    </footer>
+</body>
+</html>
