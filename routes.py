@@ -425,27 +425,30 @@ def login():
     error = None
 
     if request.method == "POST":
+        student_identifier = request.form.get(
+            "student_code", ""
+        ).strip()
 
-        email = request.form.get("student_code")
+        password = request.form.get("password", "")
 
-        password = request.form.get("password")
-
-        user = Student.query.filter_by(
-            email=email
+        # Find the student by either Student ID or email
+        user = Student.query.filter(
+            db.or_(
+                Student.student_code == student_identifier,
+                Student.email == student_identifier
+            )
         ).first()
 
-        if user and check_password_hash(
-            user.password,
-            password
+        # Check that the student exists and has a password
+        if (
+            user
+            and user.password
+            and check_password_hash(user.password, password)
         ):
             login_user(user)
+            return redirect(url_for("routes.home"))
 
-            return redirect(
-                url_for("routes.home")
-            )
-
-        else:
-            error = "Invalid username or password."
+        error = "Invalid Student ID/email or password."
 
     return render_template(
         "loginpage.html",

@@ -40,6 +40,10 @@
                 Sign in to verify your attendance
             </p>
 
+            {% if error %}
+                <p class="login-error">{{ error }}</p>
+            {% endif %}
+
             <form method="POST"> 
  
                 <label for="student_code">Student ID</label> 

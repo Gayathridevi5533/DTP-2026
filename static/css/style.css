@@ -75,83 +75,127 @@ body {
     min-height: 100vh;
 }
 
-
-/* =====================================================
-   NAVIGATION
-===================================================== */
-
 /* ---------- NAVBAR ---------- */
 
-.navbar{
-    width:100%;
-    background:#00594f;
 
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+/* =========================
+   STUDENT NAVBAR
+========================= */
 
-    padding:15px 40px;
-
-    box-sizing:border-box;
+.navbar {
+    width: 100%;
+    background: #00594f;
+    padding: 15px 40px;
+    box-sizing: border-box;
 }
 
-
-/* ---------- LEFT SIDE ---------- */
-
-.nav-title{
-    display:flex;
-    align-items:center;
-
-    gap:20px;
+.navbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    width: 100%;
 }
 
-.school-logo{
-    width:auto;
-    height:95px;
-
-    object-fit:contain;
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 38px;
+    min-width: 0;
 }
 
-.nav-title span{
-    color:white;
-
-    font-size:25px;
-
-    font-weight:650;
+.navbar .logo {
+    height: 97px;
+    width: auto;
+    object-fit: contain;
+    display: block;
 }
 
-
-/* ---------- RIGHT SIDE ---------- */
-
-.nav-buttons{
-    display:flex;
-    align-items:center;
-
-    gap:15px;
+.navbar-brand h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 25px;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
-.nav-button{
-    background:white;
-
-    color:#00594f;
-
-    text-decoration:none;
-
-    font-size:17px;
-    font-weight:600;
-
-    padding:10px 18px;
-
-    border-radius:6px;
-
-    transition:0.2s ease;
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-left: auto;
 }
 
-.nav-button:hover{
-    background:#eef4f2;
+.nav-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 55px;
+    padding: 0 20px;
 
-    transform:translateY(-2px);
+    background: #ffffff;
+    color: #00594f;
+    border: 2px solid #ffffff;
+    border-radius: 12px;
+
+    font-size: 17px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition: background-color 0.2s ease,
+                color 0.2s ease,
+                transform 0.2s ease;
 }
+
+.nav-button:hover {
+    transform: translateY(-3px);
+    background-color: #ffffff;
+    color: #00594f;
+}
+
+.nav-button:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 4px;
+}
+
+/* Responsive layout */
+@media (max-width: 900px) {
+    .navbar {
+        padding: 20px;
+    }
+
+    .navbar-content {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .navbar-brand {
+        gap: 25px;
+    }
+
+    .navbar .logo {
+        height: 75px;
+    }
+
+    .navbar-brand h2 {
+        font-size: 28px;
+        white-space: normal;
+    }
+
+    .navbar-actions {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .nav-button {
+        min-height: 40px;
+        padding: 0 20px;
+        font-size: 18px;
+    }
+}
+
 
 
 /* =====================================================

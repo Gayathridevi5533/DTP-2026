@@ -14,34 +14,34 @@
 <body>
 
     <!-- =========================
-         NAVBAR
-    ========================== -->
+        TOP NAVBAR
+    ========================= -->
 
     <nav class="navbar">
 
-        <div class="nav-title">
-            Teacher Attendance
+        <div class="navbar-left">
+            <img
+                src="{{ url_for('static', filename='images/burnside-logo.png') }}"
+                alt="Burnside High School Logo"
+                class="school-logo"
+            >
+
+            <span class="navbar-title">Teacher Attendance</span>
         </div>
 
-        <div class="nav-buttons">
-
-            <a
-                href="{{ url_for('routes.teacher') }}"
-                class="nav-link"
-            >
-                Dashboard
+        <div class="navbar-right">
+            <a href="{{ url_for('routes.teacher') }}"
+                class="nav-button">
+                    Dashboard
             </a>
-
-            <a
-                href="{{ url_for('routes.import_students') }}"
-                class="nav-link active"
-            >
-                Import Student Roll
+            <a href="{{ url_for('routes.import_schedule') }}"
+            class="nav-button">
+                Import Schedule
             </a>
-
         </div>
 
     </nav>
+
 
 
     <!-- =========================

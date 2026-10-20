@@ -17,35 +17,35 @@
 
 <body>
 
-    <div class="navbar">
+    
+    <nav class="navbar">
+        <div class="navbar-content">
 
-        <div class="nav-title">
+            <div class="navbar-brand">
+                <img
+                    src="{{ url_for('static', filename='images/burnside-logo.png') }}"
+                    alt="Burnside High School Logo"
+                    class="logo"
+                >
 
-            <img
-                src="{{ url_for('static', filename='images/burnside-logo.png') }}"
-                alt="Burnside High School Logo"
-                class="school-logo"
-            >
+                <h2>Student Attendance</h2>
+            </div>
 
-            <span>Student Attendance</span>
+            <div class="navbar-actions">
+                <a href="{{ url_for('routes.change_password') }}"
+                class="nav-button">
+                    Change Password
+                </a>
+
+                <a href="{{ url_for('routes.logout') }}"
+                class="nav-button">
+                    Logout
+                </a>
+            </div>
 
         </div>
+    </nav>
 
-        <div class="nav-buttons">
-
-            <a href="{{ url_for('routes.change_password') }}"
-            class="nav-button">
-                Change Password
-            </a>
-
-            <a href="{{ url_for('routes.logout') }}"
-            class="nav-button">
-                Logout
-            </a>
-
-        </div>
-
-    </div>
 <div class="container">
 
     <div class="welcome-row">
