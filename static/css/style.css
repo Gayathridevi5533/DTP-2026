@@ -1383,33 +1383,27 @@ tbody tr:hover {
 }
 
 
-/*
-   This is the actual circumference.
 
-   The JavaScript will change
-   --present-percent automatically.
-*/
+
 
 .attendance-ring {
-
-    --present-percent: 80%;
+    --present-percent: 0%;
+    --absent-percent: 0%;
 
     width: 230px;
     height: 230px;
-
     border-radius: 50%;
 
-    background:
-        conic-gradient(
-            #35a853 0 var(--present-percent),
-            #e53935 var(--present-percent) 100%
-        );
+    background: conic-gradient(
+        #35a853 0 var(--present-percent),
+        #e53935 var(--present-percent)
+            calc(var(--present-percent) + var(--absent-percent)),
+        #ffffff calc(var(--present-percent) + var(--absent-percent)) 100%
+    );
 
     display: flex;
-
     justify-content: center;
     align-items: center;
-
     position: relative;
 }
 

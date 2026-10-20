@@ -250,96 +250,94 @@
 
     <script src="/static/Java Script/style.js"></script>
 
-    <script>
+    
+    
+        <script>
+            // Get actual attendance values from Flask
+            const totalDays = {{ total_days }};
+            const presentDays = {{ present_days }};
+            const absentDays = {{ absent_days }};
 
-        /*
-        * Example attendance data
-        *
-        * Later we will replace these values
-        * with the actual values from Flask/database.
-        */
+            // Calculate percentages
+            const presentPercentage = totalDays > 0
+                ? Math.round((presentDays / totalDays) * 100)
+                : 0;
 
-        const presentDays = 80;
-        const absentDays = 20;
+            const absentPercentage = totalDays > 0
+                ? Math.round((absentDays / totalDays) * 100)
+                : 0;
+
+            // Find the attendance ring
+            const attendanceRing =
+                document.querySelector(".attendance-ring");
+
+            // Start with a completely white ring
+            attendanceRing.style.setProperty(
+                "--present-percent",
+                "0%"
+            );
+
+            attendanceRing.style.setProperty(
+                "--absent-percent",
+                "0%"
+            );
+
+            // Animate the ring filling clockwise
+            const duration = 1800;
+            let startTime = null;
+
+            function animateRing(timestamp) {
+                if (startTime === null) {
+                    startTime = timestamp;
+                }
+
+                const progress = Math.min(
+                    (timestamp - startTime) / duration,
+                    1
+                );
+
+                // Smooth ease-out effect
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+                const currentPercent = presentPercentage * easedProgress;
+
+                // Animate the green Present section
+                attendanceRing.style.setProperty(
+                    "--present-percent",
+                    currentPercent + "%"
+                );
+
+                // Animate the red Absent section
+                const currentAbsentPercent = absentPercentage * easedProgress;
+
+                attendanceRing.style.setProperty(
+                    "--absent-percent",
+                    currentAbsentPercent + "%"
+                );
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateRing);
+                }
+            }
+
+            requestAnimationFrame(animateRing);
+
+            // Update the centre percentage
+            document.getElementById("attendancePercentage").textContent =
+                presentPercentage + "%";
+
+            // Update Present legend
+            document.getElementById("presentText").textContent =
+                presentPercentage + "% (" + presentDays +
+                (presentDays === 1 ? " day)" : " days)");
+
+            // Update Absent legend
+            document.getElementById("absentText").textContent =
+                absentPercentage + "% (" + absentDays +
+                (absentDays === 1 ? " day)" : " days)");
+        </script>
 
 
-        /*
-        * Calculate total attendance
-        */
-
-        const totalDays = presentDays + absentDays;
-
-
-        /*
-        * Calculate percentages
-        */
-
-        let presentPercentage = 0;
-        let absentPercentage = 0;
-
-
-        if (totalDays > 0) {
-
-            presentPercentage =
-                Math.round((presentDays / totalDays) * 100);
-
-            absentPercentage =
-                Math.round((absentDays / totalDays) * 100);
-
-        }
-
-
-        /*
-        * Find the attendance ring
-        */
-
-        const attendanceRing =
-            document.querySelector(".attendance-ring");
-
-
-        /*
-        * Tell the ring how much should be green
-        */
-
-        attendanceRing.style.setProperty(
-            "--present-percent",
-            presentPercentage + "%"
-        );
-
-
-        /*
-        * Display percentage in centre
-        */
-
-        document.getElementById(
-            "attendancePercentage"
-        ).textContent = presentPercentage + "%";
-
-
-        /*
-        * Display Present information
-        */
-
-        document.getElementById(
-            "presentText"
-        ).textContent =
-            presentPercentage + "% (" +
-            presentDays +
-            " days)";
-
-
-        /*
-        * Display Absent information
-        */
-
-        document.getElementById(
-            "absentText"
-        ).textContent =
-            absentPercentage + "% (" +
-            absentDays +
-            " days)";
-
-    </script>
 
 </body>
 
