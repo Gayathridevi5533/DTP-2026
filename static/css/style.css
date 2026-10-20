@@ -1514,3 +1514,47 @@ tbody tr:hover {
 #absentText {
     color: #e53935;
 }
+
+
+/* =========================================
+   PAGE FOOTER
+========================================= */
+
+.teacher-footer {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 30px;
+    padding: 32px 20px;
+    background-color: #00594f;
+    color: #ffffff;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.teacher-footer p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.teacher-footer span {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #d5e9e4;
+}
+
+
+@media (max-width: 600px) {
+    .teacher-footer {
+        padding: 24px 14px;
+    }
+
+    .teacher-footer p {
+        font-size: 17px;
+    }
+
+    .teacher-footer span {
+        font-size: 13px;
+    }
+}
