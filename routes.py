@@ -508,21 +508,21 @@ def signup():
 
 @routes.route("/forgot_password", methods=["GET", "POST"])
 def forgot_password():
-
     if request.method == "POST":
+        email = request.form.get("email", "").strip()
 
-        email = request.form.get("email")
+        user = Student.query.filter_by(email=email).first()
 
-        user = Student.query.filter_by(
-            email=email
-        ).first()
+        # Use a general message whether or not the account exists.
+        # This avoids revealing which email addresses are registered.
+        message_text = (
+            "If an account exists for that email, "
+            "a password reset link has been sent."
+        )
 
         if user:
-
             token = secrets.token_hex(16)
-
             user.reset_token = token
-
             db.session.commit()
 
             reset_link = url_for(
@@ -532,7 +532,7 @@ def forgot_password():
             )
 
             msg = Message(
-                "Password Reset",
+                subject="Password Reset",
                 sender="gayathrideviganesh5533@gmail.com",
                 recipients=[email]
             )
@@ -545,13 +545,12 @@ Click the link below to reset your password:
 
             mail.send(msg)
 
-            return "Reset email sent!"
+        return jsonify({
+            "success": True,
+            "message": message_text
+        })
 
-        return "No account found"
-
-    return render_template(
-        "forgot_password.html"
-    )
+    return render_template("forgot_password.html")
 
 
 @routes.route("/test_mail")
