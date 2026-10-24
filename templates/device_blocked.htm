@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Not Supported | Burnside</title>
+
+    <link rel="icon" type="image/png"
+          href="{{ url_for('static', filename='images/burnside-logo.png') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/error.css') }}">
+</head>
+<body>
+    <header class="error-header">
+        <img src="{{ url_for('static', filename='images/burnside-logo.png') }}"
+             alt="Burnside High School Logo">
+        <h1>Burnside High School</h1>
+    </header>
+
+    <main class="error-main">
+        <div class="error-card">
+            <h2>Device Not Supported</h2>
+            <p>
+                The Attendance Verification System is designed for laptop
+                and desktop use.
+            </p>
+            <p>
+                Please open this website on a laptop or desktop computer
+                to continue.
+            </p>
+        </div>
+    </main>
+
+    <footer class="error-footer">
+        <p>&copy; 2026 Burnside High School</p>
+        <span>Attendance Verification System</span>
+    </footer>
+</body>
+</html>

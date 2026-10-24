@@ -923,3 +923,18 @@ def internal_server_error(error):
 @routes.app_errorhandler(505)
 def http_version_not_supported(error):
     return render_template("505.html"), 505
+
+@routes.before_request
+def block_mobile_devices():
+    user_agent = request.headers.get("User-Agent", "").lower()
+
+    mobile_keywords = [
+        "android",
+        "iphone",
+        "ipad",
+        "ipod",
+        "mobile"
+    ]
+
+    if any(keyword in user_agent for keyword in mobile_keywords):
+        return render_template("device_blocked.html"), 403

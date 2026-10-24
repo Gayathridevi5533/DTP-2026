@@ -1,6 +1,5 @@
 from flask import Flask
 from extensions import db, login_manager, mail
-#from flask_mail import Mail, Message
 from routes import routes
 
 app = Flask(__name__)
