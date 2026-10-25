@@ -257,6 +257,13 @@
     <span>Attendance Verification System</span>
 </footer>
 
+<div
+    id="attendance-data"
+    data-total-days="{{ total_days }}"
+    data-present-days="{{ present_days }}"
+    data-absent-days="{{ absent_days }}"
+    hidden
+></div>
 
     <script src="/static/Java Script/style.js"></script>
 
@@ -264,9 +271,11 @@
     
         <script>
             // Get actual attendance values from Flask
-            const totalDays = {{ total_days }};
-            const presentDays = {{ present_days }};
-            const absentDays = {{ absent_days }};
+            const attendanceData = document.getElementById("attendance-data");
+
+            const totalDays = Number(attendanceData.dataset.totalDays);
+            const presentDays = Number(attendanceData.dataset.presentDays);
+            const absentDays = Number(attendanceData.dataset.absentDays);
 
             // Calculate percentages
             const presentPercentage = totalDays > 0

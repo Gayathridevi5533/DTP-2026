@@ -1,10 +1,10 @@
-from extensions import db, mail
+from extensions import db, mail, login_manager
 from math import radians, sin, cos, sqrt, atan2
-from datetime import datetime, date, time
+from datetime import datetime
 from flask_mail import Message
 from flask import request
 import secrets
-from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash
+from flask import Blueprint, render_template, jsonify, redirect, url_for, flash
 from flask_login import (
     UserMixin,
     login_user,
@@ -22,7 +22,7 @@ from werkzeug.security import (
 )
 
 routes = Blueprint("routes", __name__)
-from extensions import login_manager
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -252,12 +252,12 @@ def verify_location():
         status = "allowed"
 
     # ip = request.remote_addr
-    
+
     return jsonify({
         "status": status,
         "distance": round(dist, 2)
         # "id": attendance_id
-})
+    })
 
 
 @routes.route("/check_schedule")
@@ -419,6 +419,7 @@ def teacher():
         students=students,
         attendance_by_student=attendance_by_student
     )
+
 
 @routes.route("/login", methods=["GET", "POST"])
 def login():
@@ -616,8 +617,12 @@ def import_students():
             # REQUIRED FIELDS
             # ------------------
 
-            if not username or not email or not student_code or not student_class:
-
+            if (
+                not username
+                or not email
+                or not student_code
+                or not student_class
+            ):
                 errors.append(
                     f"Row {row_number}: Missing data."
                 )
@@ -909,6 +914,7 @@ def import_schedule():
 
     return render_template("import_schedule.html")
 
+
 @routes.app_errorhandler(404)
 def page_not_found(error):
     return render_template("404.html"), 404
@@ -923,6 +929,7 @@ def internal_server_error(error):
 @routes.app_errorhandler(505)
 def http_version_not_supported(error):
     return render_template("505.html"), 505
+
 
 @routes.before_request
 def block_mobile_devices():
