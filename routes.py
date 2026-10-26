@@ -21,12 +21,39 @@ from werkzeug.security import (
     check_password_hash
 )
 
+from functools import wraps
+from flask import abort
+
 routes = Blueprint("routes", __name__)
+
+# SHARED TEACHER LOGIN
+# ADMIN CAN CHANGE THESE
+
+TEACHER_USERNAME = "teacher@burnside"
+TEACHER_PASSWORD = "testpassword"
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Student.query.get(int(user_id))
+
+    # Teacher session
+    if user_id == "teacher":
+        return Teacher()
+
+    # Student session
+    if user_id.startswith("student:"):
+        student_id = user_id.split(":", 1)[1]
+
+        if student_id.isdigit():
+            return db.session.get(Student, int(student_id))
+
+        return None
+
+    # Support older student sessions
+    if user_id.isdigit():
+        return db.session.get(Student, int(user_id))
+
+    return None
 
 
 # =========================
@@ -66,6 +93,48 @@ class Student(UserMixin, db.Model):
     reset_token = db.Column(
         db.String(200)
     )
+
+    @property
+    def is_teacher(self):
+        return False
+
+    def get_id(self):
+        return f"student:{self.id}"
+
+# =========================
+# SHARED TEACHER USER
+# =========================
+
+
+class Teacher(UserMixin):
+
+    id = "teacher"
+    username = TEACHER_USERNAME
+    role = "teacher"
+
+    def get_id(self):
+        return "teacher"
+
+    @property
+    def is_teacher(self):
+        return True
+
+# =========================
+# TEACHER-ONLY ACCESS
+# =========================
+
+
+def teacher_required(function):
+
+    @wraps(function)
+    def decorated_function(*args, **kwargs):
+
+        if not getattr(current_user, "is_teacher", False):
+            abort(403)
+
+        return function(*args, **kwargs)
+
+    return decorated_function
 
 
 class Schedule(db.Model):
@@ -193,6 +262,9 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 @login_required
 def home():
 
+    if getattr(current_user, "is_teacher", False):
+        return redirect(url_for("routes.teacher"))
+
     records = Attendance.query.filter_by(
         student_id=current_user.id
     ).all()
@@ -297,6 +369,12 @@ def check_schedule():
 @routes.route("/submit_reason", methods=["POST"])
 @login_required
 def submit_reason():
+
+    if getattr(current_user, "is_teacher", False):
+        return jsonify({
+            "status": "denied",
+            "message": "Teachers cannot submit student attendance."
+        }), 403
 
     data = request.get_json()
 
@@ -404,6 +482,8 @@ def submit_reason():
 
 
 @routes.route("/teacher")
+@login_required
+@teacher_required
 def teacher():
 
     students = Student.query.all()
@@ -423,33 +503,52 @@ def teacher():
 
 @routes.route("/login", methods=["GET", "POST"])
 def login():
+
     error = None
 
     if request.method == "POST":
-        student_identifier = request.form.get(
-            "student_code", ""
-        ).strip()
 
+        account_type = request.form.get("account_type", "student")
+        identifier = request.form.get("identifier", "").strip()
         password = request.form.get("password", "")
 
-        # Find the student by either Student ID or email
-        user = Student.query.filter(
-            db.or_(
-                Student.student_code == student_identifier,
-                Student.email == student_identifier
-            )
-        ).first()
+        # =========================
+        # TEACHER LOGIN
+        # =========================
 
-        # Check that the student exists and has a password
-        if (
-            user
-            and user.password
-            and check_password_hash(user.password, password)
-        ):
-            login_user(user)
-            return redirect(url_for("routes.home"))
+        if account_type == "teacher":
 
-        error = "Invalid Student ID/email or password."
+            if (
+                identifier == TEACHER_USERNAME
+                and password == TEACHER_PASSWORD
+            ):
+                login_user(Teacher())
+                return redirect(url_for("routes.teacher"))
+
+            error = "Invalid teacher username or password."
+
+        # =========================
+        # STUDENT LOGIN
+        # =========================
+
+        else:
+
+            user = Student.query.filter(
+                db.or_(
+                    Student.student_code == identifier,
+                    Student.email == identifier
+                )
+            ).first()
+
+            if (
+                user
+                and user.password
+                and check_password_hash(user.password, password)
+            ):
+                login_user(user)
+                return redirect(url_for("routes.home"))
+
+            error = "Invalid Student ID/email or password."
 
     return render_template(
         "loginpage.html",
@@ -572,6 +671,8 @@ def test_mail():
 
 
 @routes.route("/import_students", methods=["GET", "POST"])
+@login_required
+@teacher_required
 def import_students():
 
     if request.method == "POST":
@@ -783,6 +884,10 @@ def reset_password(token):
 @login_required
 def change_password():
 
+    if getattr(current_user, "is_teacher", False):
+        flash("The teacher password can only be changed by the administrator.")
+        return redirect(url_for("routes.teacher"))
+
     if request.method == 'POST':
 
         current_password = request.form.get('current_password')
@@ -805,6 +910,8 @@ def change_password():
 
 
 @routes.route("/import_schedule", methods=["GET", "POST"])
+@login_required
+@teacher_required
 def import_schedule():
 
     if request.method == "POST":

@@ -984,3 +984,19 @@ tbody tr:hover {
         font-size: 15px;
     }
 }
+
+/* ---------- LOGOUT BUTTON ---------- */
+
+.navbar-links .logout-button {
+    background: #ffffff;
+    color: #00594f;
+
+    border: 2px solid #ffffff;
+}
+
+.navbar-links .logout-button:hover {
+    background: #e8f3f0;
+    color: #00483f;
+
+    border-color: #e8f3f0;
+}

@@ -4,41 +4,46 @@
     <title>Student Login</title>
 
     <link rel="icon" type="image/png"
-      href="/static/images/favicon.png">
+          href="/static/images/favicon.png">
 
     <link rel="stylesheet" href="/static/css/loginpage.css">
 </head>
 
 <body>
 
-    <!-- The Nav -->
+    <!-- NAVBAR -->
     <nav class="navbar">
-
         <div class="navbar-content">
 
-            <img src="{{ url_for('static', filename='images/burnside-logo.png') }}"
+            <img
+                src="{{ url_for('static', filename='images/burnside-logo.png') }}"
                 alt="Burnside Logo"
-                class="logo">
+                class="logo"
+            >
 
             <h2>Attendance Verification System</h2>
 
         </div>
-
     </nav>
 
-    <!-- Login Section -->
-        <main class="login-container">
 
+    <!-- LOGIN SECTION -->
+    <main class="login-container">
+
+        <!-- CAMPUS IMAGE -->
         <div class="login-image">
-
-            <img src="{{ url_for('static', filename='images/burnside-campus.jpg') }}"
-                    alt="Burnside Students">
-
+            <img
+                src="{{ url_for('static', filename='images/burnside-campus.jpg') }}"
+                alt="Burnside Students"
+            >
         </div>
 
+
+        <!-- LOGIN CARD -->
         <div class="login-card">
 
             <h1>Welcome Back</h1>
+
             <p class="subtitle">
                 Sign in to verify your attendance
             </p>
@@ -47,53 +52,198 @@
                 <p class="login-error">{{ error }}</p>
             {% endif %}
 
-            <form method="POST"> 
- 
-                <label for="student_code">Student ID</label> 
-            
-                <input 
-                    type="text" 
-                    id="student_code" 
-                    name="student_code" 
-                    required 
-                > 
-            
-                <label for="password">Password</label>
 
-                <div class="password-input">
+            <!-- LOGIN FORM -->
+            <form method="POST">
 
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        required 
+                <!-- ACCOUNT TYPE BUTTONS -->
+                <div class="account-type-section">
+
+                    <label>Sign in as</label>
+
+                    <div class="account-type-buttons">
+
+                        <button
+                            type="button"
+                            class="account-type-btn active"
+                            id="student_btn"
+                            data-account="student"
+                            aria-pressed="true"
+                        >
+                            Student
+                        </button>
+
+                        <button
+                            type="button"
+                            class="account-type-btn"
+                            id="teacher_btn"
+                            data-account="teacher"
+                            aria-pressed="false"
+                        >
+                            Teacher
+                        </button>
+
+                    </div>
+
+                    <!-- Sends the selected account type to Flask -->
+                    <input
+                        type="hidden"
+                        id="account_type"
+                        name="account_type"
+                        value="student"
                     >
 
                 </div>
-            
-                <button type="submit"> 
-                    Sign In & Record Attendance 
-                </button> 
-            
+
+
+                <!-- USERNAME / STUDENT ID / EMAIL -->
+                <label for="identifier" id="identifier_label">
+                    Student ID or School Email
+                </label>
+
+                <input
+                    type="text"
+                    id="identifier"
+                    name="identifier"
+                    placeholder="Enter your Student ID or email"
+                    required
+                >
+
+
+                <!-- PASSWORD -->
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="password-input">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- SIGN IN BUTTON -->
+                <button type="submit">
+                    Sign In
+                </button>
+
             </form>
 
-            <a href="{{ url_for('routes.forgot_password') }}">
-                Forgot password?
-            </a>
+
+            <!-- STUDENT FORGOT PASSWORD -->
+            <div id="forgot_password_section">
+
+                <a href="{{ url_for('routes.forgot_password') }}">
+                    Forgot password?
+                </a>
+
+            </div>
+
+
+            <!-- TEACHER PASSWORD INFORMATION -->
+            <p
+                id="teacher_password_note"
+                style="display: none;"
+            >
+                If you have forgotten the teacher password,
+                please contact the administrator.
+            </p>
 
         </div>
 
-        </main>
+    </main>
 
-    <!-- =========================
-        PAGE FOOTER
-    ========================= -->
 
-<footer class="teacher-footer">
-    <p>&copy; 2026 Burnside High School</p>
-    <span>Attendance Verification System</span>
-</footer>
+    <!-- PAGE FOOTER -->
+    <footer class="teacher-footer">
 
+        <p>&copy; 2026 Burnside High School</p>
+
+        <span>Attendance Verification System</span>
+
+    </footer>
+
+
+    <!-- LOGIN FORM JAVASCRIPT -->
+    <script>
+
+        const accountType = document.getElementById("account_type");
+
+        const studentButton = document.getElementById("student_btn");
+        const teacherButton = document.getElementById("teacher_btn");
+
+        const identifierLabel = document.getElementById("identifier_label");
+        const identifierInput = document.getElementById("identifier");
+
+        const forgotPasswordSection = document.getElementById(
+            "forgot_password_section"
+        );
+
+        const teacherPasswordNote = document.getElementById(
+            "teacher_password_note"
+        );
+
+
+        function updateLoginForm(type) {
+
+            accountType.value = type;
+
+            if (type === "teacher") {
+
+                // Teacher login
+                teacherButton.classList.add("active");
+                studentButton.classList.remove("active");
+
+                teacherButton.setAttribute("aria-pressed", "true");
+                studentButton.setAttribute("aria-pressed", "false");
+
+                identifierLabel.textContent = "Teacher Username";
+                identifierInput.placeholder = "Enter teacher username";
+
+                forgotPasswordSection.style.display = "none";
+                teacherPasswordNote.style.display = "block";
+
+            } else {
+
+                // Student login
+                studentButton.classList.add("active");
+                teacherButton.classList.remove("active");
+
+                studentButton.setAttribute("aria-pressed", "true");
+                teacherButton.setAttribute("aria-pressed", "false");
+
+                identifierLabel.textContent = "Student ID or School Email";
+                identifierInput.placeholder = "Enter your Student ID or email";
+
+                forgotPasswordSection.style.display = "block";
+                teacherPasswordNote.style.display = "none";
+
+            }
+
+        }
+
+
+        // Switch to student login
+        studentButton.addEventListener("click", function () {
+            updateLoginForm("student");
+        });
+
+
+        // Switch to teacher login
+        teacherButton.addEventListener("click", function () {
+            updateLoginForm("teacher");
+        });
+
+
+        // Student login is selected when the page loads
+        updateLoginForm("student");
+
+    </script>
 
 </body>
 </html>

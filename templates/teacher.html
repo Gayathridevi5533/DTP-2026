@@ -32,20 +32,27 @@
 
         </div>
 
-        <div class="navbar-links">
+                <div class="navbar-links">
 
             <a
-                href="/import_students"
+                href="{{ url_for('routes.import_students') }}"
                 class="nav-button"
             >
                 Import Student Roll
             </a>
 
             <a
-                href="/import_schedule"
+                href="{{ url_for('routes.import_schedule') }}"
                 class="nav-button"
             >
                 Import Schedule
+            </a>
+
+            <a
+                href="{{ url_for('routes.logout') }}"
+                class="nav-button logout-button"
+            >
+                Logout
             </a>
 
         </div>

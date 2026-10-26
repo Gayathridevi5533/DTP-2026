@@ -92,20 +92,22 @@ body {
 /* ---------- LOGIN CARD ---------- */
 
 .login-card {
-    width: 600px;
-    height: 600px;
+    width: 520px;
+    min-height: 600px;
+    height: auto;
 
     background: white;
 
-    border-radius: 12px;
+    border: 1px solid #e5eae9;
+    border-radius: 16px;
 
-    padding: 50px;
+    padding: 42px 45px;
 
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
 
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 
@@ -173,6 +175,70 @@ body {
     outline: none;
 
     border-color: #00594f;
+}
+
+/* ---------- ACCOUNT TYPE BUTTONS ---------- */
+
+.account-type-section {
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.account-type-section > label {
+    display: block;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.account-type-buttons {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+
+    padding: 5px;
+
+    background: #edf3f2;
+    border: 1px solid #dce7e5;
+    border-radius: 10px;
+}
+
+.account-type-buttons .account-type-btn {
+    flex: 1;
+    width: 50%;
+
+    margin: 0;
+    padding: 12px 15px;
+
+    background: transparent;
+    color: #00594f;
+
+    border: 1px solid transparent;
+    border-radius: 7px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.account-type-buttons .account-type-btn:hover {
+    background: #dcebe7;
+}
+
+.account-type-buttons .account-type-btn.active {
+    background: #00594f;
+    color: white;
+
+    box-shadow: 0 2px 6px rgba(0, 89, 79, 0.15);
+}
+
+.account-type-buttons .account-type-btn.active:hover {
+    background: #007062;
 }
 
 
@@ -266,7 +332,9 @@ footer p {
 
     .login-card {
         width: 45%;
-        max-width: 600px;
+        max-width: 520px;
+        min-height: 600px;
+        height: auto;
     }
 }
 
@@ -403,4 +471,17 @@ footer p {
     .teacher-footer p {
         font-size: 15px;
     }
+}
+
+/* ---------- TEACHER PASSWORD NOTE ---------- */
+
+#teacher_password_note {
+    margin-top: 15px;
+
+    color: #777777;
+
+    font-size: 13px;
+    line-height: 1.5;
+
+    text-align: center;
 }
