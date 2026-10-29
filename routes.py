@@ -1,3 +1,5 @@
+"""Routes for the Burnside High School Attendance Verification System."""
+
 from extensions import db, mail, login_manager
 from math import radians, sin, cos, sqrt, atan2
 from datetime import datetime
@@ -35,7 +37,7 @@ TEACHER_PASSWORD = "testpassword"
 
 @login_manager.user_loader
 def load_user(user_id):
-
+    """Load a student from the database using their user ID."""
     # Teacher session
     if user_id == "teacher":
         return Teacher()

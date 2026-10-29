@@ -1,3 +1,5 @@
+"""Main application module for the attendance verification system."""
+
 from flask import Flask
 from extensions import db, login_manager, mail
 from routes import routes
