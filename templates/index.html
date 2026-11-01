@@ -4,13 +4,16 @@
 
 <head>
 
+    <!-- page title -->
     <title>
         Study Period Attendance
     </title>
 
+    <!-- website icon -->
     <link rel="icon" type="image/png"
       href="/static/images/favicon.png">
 
+    <!-- CSS for the attendance page -->
     <link
         rel="stylesheet"
         href="/static/css/style.css">
@@ -20,20 +23,28 @@
 
 <body>
 
-    
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <!-- navigation bar with the school logo and account links -->
     <nav class="navbar">
         <div class="navbar-content">
 
             <div class="navbar-brand">
+
+                <!-- Burnside High School logo -->
                 <img
                     src="{{ url_for('static', filename='images/burnside-logo.png') }}"
                     alt="Burnside High School Logo"
                     class="logo"
                 >
 
+                <!-- website name -->
                 <h2>Student Attendance</h2>
             </div>
 
+            <!-- links for changing password and logging out -->
             <div class="navbar-actions">
                 <a href="{{ url_for('routes.change_password') }}"
                 class="nav-button">
@@ -49,12 +60,19 @@
         </div>
     </nav>
 
+
+<!-- =========================
+     MAIN CONTENT
+========================== -->
+
 <div class="container">
 
+    <!-- welcome message and current time -->
     <div class="welcome-row">
 
         <div class="page-header">
 
+            <!-- display the logged-in student's username -->
             <h1>
                 Welcome, {{ current_user.username }}!
             </h1>
@@ -65,6 +83,7 @@
 
         </div>
 
+        <!-- card showing the current time -->
         <div class="clock-card">
 
             <h3>Current Time</h3>
@@ -78,6 +97,11 @@
     </div>
 
 
+    <!-- =========================
+         STUDY PERIOD ATTENDANCE
+    ========================== -->
+
+    <!-- card containing the attendance verification section -->
     <div class="attendance-card">
 
         <div class="attendance-header">
@@ -92,6 +116,7 @@
 
         <div style="padding:30px;">
 
+            <!-- show the student's location verification status -->
             <div class="location-card">
 
                 <h3>Location Verification</h3>
@@ -105,24 +130,29 @@
 
             </div>
 
+            <!-- button previously used to check the location -->
             <!-- <button
                 class="import-button"
                 onclick="checkLocation()">
                 Mark Attendance
             </button> -->
 
+            <!-- display the result after checking attendance -->
             <p id="result" style="display: block;"></p>
 
+            <!-- section where the student enters their study reason -->
             <div class="study-reason-card">
 
                 <h3>Study Reason</h3>
 
+                <!-- input for what the student is working on -->
                 <input
                     type="text"
                     id="study_reason"
                     placeholder="What are you working on?"
                 >
 
+                <!-- hidden fields used to store the student's location -->
                 <input
                     type="hidden"
                     id="latitude"
@@ -135,6 +165,7 @@
                     value=""
                 >
 
+                <!-- submit the study reason and mark attendance -->
                 <button
                     class="import-button"
                     onclick="submitReason()">
@@ -148,6 +179,11 @@
     </div>
 
 
+    <!-- =========================
+         OVERALL ATTENDANCE
+    ========================== -->
+
+    <!-- section showing the student's attendance statistics -->
     <div class="overall-card">
 
         <div class="overall-header">
@@ -158,8 +194,10 @@
 
         <div class="overall-content">
 
+            <!-- display total, present and absent days -->
             <div class="attendance-stats">
 
+                <!-- total number of attendance days -->
                 <div class="attendance-stat">
 
                     <span class="stat-icon blue">📅</span>
@@ -174,6 +212,7 @@
 
                 </div>
 
+                <!-- number of days the student was present -->
                 <div class="attendance-stat">
 
                     <span class="stat-icon green">✓</span>
@@ -188,6 +227,7 @@
 
                 </div>
 
+                <!-- number of days the student was absent -->
                 <div class="attendance-stat">
 
                     <span class="stat-icon red">×</span>
@@ -204,12 +244,14 @@
 
             </div>
 
+            <!-- attendance graph and percentage breakdown -->
             <div class="attendance-card">
 
                 <h2>Your Attendance</h2>
 
                 <div class="attendance-chart">
 
+                    <!-- circular graph showing the attendance percentage -->
                     <div class="attendance-ring">
 
                         <div class="attendance-inner">
@@ -222,6 +264,7 @@
                 </div>
 
 
+                <!-- labels showing the present and absent percentages -->
                 <div class="attendance-legend">
 
                     <div class="legend-item">
@@ -252,11 +295,14 @@
 </div>
 
 
+<!-- footer at the bottom of the page -->
 <footer class="teacher-footer">
     <p>&copy; 2026 Burnside High School</p>
     <span>Attendance Verification System</span>
 </footer>
 
+
+<!-- pass the attendance values from Flask to JavaScript -->
 <div
     id="attendance-data"
     data-total-days="{{ total_days }}"
@@ -265,19 +311,25 @@
     hidden
 ></div>
 
+    <!-- link the external JavaScript file -->
     <script src="/static/Java Script/style.js"></script>
 
-    
-    
+
+
+        <!-- =========================
+             ATTENDANCE GRAPH JAVASCRIPT
+        ========================== -->
+
         <script>
-            // Get actual attendance values from Flask
+
+            // get the attendance values passed from Flask
             const attendanceData = document.getElementById("attendance-data");
 
             const totalDays = Number(attendanceData.dataset.totalDays);
             const presentDays = Number(attendanceData.dataset.presentDays);
             const absentDays = Number(attendanceData.dataset.absentDays);
 
-            // Calculate percentages
+            // calculate the present and absent percentages
             const presentPercentage = totalDays > 0
                 ? Math.round((presentDays / totalDays) * 100)
                 : 0;
@@ -286,11 +338,11 @@
                 ? Math.round((absentDays / totalDays) * 100)
                 : 0;
 
-            // Find the attendance ring
+            // find the attendance ring on the page
             const attendanceRing =
                 document.querySelector(".attendance-ring");
 
-            // Start with a completely white ring
+            // start with a completely white ring
             attendanceRing.style.setProperty(
                 "--present-percent",
                 "0%"
@@ -301,32 +353,34 @@
                 "0%"
             );
 
-            // Animate the ring filling clockwise
+            // set the time taken for the graph animation
             const duration = 1800;
             let startTime = null;
 
+            // animate the attendance ring
             function animateRing(timestamp) {
                 if (startTime === null) {
                     startTime = timestamp;
                 }
 
+                // calculate how far the animation has progressed
                 const progress = Math.min(
                     (timestamp - startTime) / duration,
                     1
                 );
 
-                // Smooth ease-out effect
+                // make the animation slow down smoothly at the end
                 const easedProgress = 1 - Math.pow(1 - progress, 3);
 
                 const currentPercent = presentPercentage * easedProgress;
 
-                // Animate the green Present section
+                // animate the green Present section
                 attendanceRing.style.setProperty(
                     "--present-percent",
                     currentPercent + "%"
                 );
 
-                // Animate the red Absent section
+                // animate the red Absent section
                 const currentAbsentPercent = absentPercentage * easedProgress;
 
                 attendanceRing.style.setProperty(
@@ -334,23 +388,25 @@
                     currentAbsentPercent + "%"
                 );
 
+                // keep the animation running until it is complete
                 if (progress < 1) {
                     requestAnimationFrame(animateRing);
                 }
             }
 
+            // start the attendance ring animation
             requestAnimationFrame(animateRing);
 
-            // Update the centre percentage
+            // update the percentage displayed in the centre of the graph
             document.getElementById("attendancePercentage").textContent =
                 presentPercentage + "%";
 
-            // Update Present legend
+            // update the Present section of the legend
             document.getElementById("presentText").textContent =
                 presentPercentage + "% (" + presentDays +
                 (presentDays === 1 ? " day)" : " days)");
 
-            // Update Absent legend
+            // update the Absent section of the legend
             document.getElementById("absentText").textContent =
                 absentPercentage + "% (" + absentDays +
                 (absentDays === 1 ? " day)" : " days)");

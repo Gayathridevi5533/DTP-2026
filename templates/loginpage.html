@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- page title -->
     <title>Student Login</title>
 
+    <!-- website icon -->
     <link rel="icon" type="image/png"
           href="/static/images/favicon.png">
 
+    <!-- CSS for the login page -->
     <link rel="stylesheet" href="/static/css/loginpage.css">
 </head>
 
 <body>
 
     <!-- NAVBAR -->
+    <!-- navigation bar with the school logo and website name -->
     <nav class="navbar">
         <div class="navbar-content">
 
+            <!-- Burnside High School logo -->
             <img
                 src="{{ url_for('static', filename='images/burnside-logo.png') }}"
                 alt="Burnside Logo"
                 class="logo"
             >
 
+            <!-- website name -->
             <h2>Attendance Verification System</h2>
 
         </div>
@@ -31,6 +37,7 @@
     <main class="login-container">
 
         <!-- CAMPUS IMAGE -->
+        <!-- image displayed beside the login form -->
         <div class="login-image">
             <img
                 src="{{ url_for('static', filename='images/burnside-campus.jpg') }}"
@@ -40,14 +47,18 @@
 
 
         <!-- LOGIN CARD -->
+        <!-- card containing the login form -->
         <div class="login-card">
 
+            <!-- welcome heading -->
             <h1>Welcome Back</h1>
 
+            <!-- short message below the heading -->
             <p class="subtitle">
                 Sign in to verify your attendance
             </p>
 
+            <!-- display an error message if login fails -->
             {% if error %}
                 <p class="login-error">{{ error }}</p>
             {% endif %}
@@ -57,12 +68,14 @@
             <form method="POST">
 
                 <!-- ACCOUNT TYPE BUTTONS -->
+                <!-- allow users to choose between student and teacher login -->
                 <div class="account-type-section">
 
                     <label>Sign in as</label>
 
                     <div class="account-type-buttons">
 
+                        <!-- student login button -->
                         <button
                             type="button"
                             class="account-type-btn active"
@@ -73,6 +86,7 @@
                             Student
                         </button>
 
+                        <!-- teacher login button -->
                         <button
                             type="button"
                             class="account-type-btn"
@@ -97,6 +111,7 @@
 
 
                 <!-- USERNAME / STUDENT ID / EMAIL -->
+                <!-- input for the student's ID, school email or teacher username -->
                 <label for="identifier" id="identifier_label">
                     Student ID or School Email
                 </label>
@@ -111,6 +126,7 @@
 
 
                 <!-- PASSWORD -->
+                <!-- input for the account password -->
                 <label for="password">
                     Password
                 </label>
@@ -128,6 +144,7 @@
 
 
                 <!-- SIGN IN BUTTON -->
+                <!-- submit the login details -->
                 <button type="submit">
                     Sign In
                 </button>
@@ -136,6 +153,7 @@
 
 
             <!-- STUDENT FORGOT PASSWORD -->
+            <!-- link for students who need to reset their password -->
             <div id="forgot_password_section">
 
                 <a href="{{ url_for('routes.forgot_password') }}">
@@ -146,6 +164,7 @@
 
 
             <!-- TEACHER PASSWORD INFORMATION -->
+            <!-- shown when the teacher login option is selected -->
             <p
                 id="teacher_password_note"
                 style="display: none;"
@@ -160,6 +179,7 @@
 
 
     <!-- PAGE FOOTER -->
+    <!-- footer displayed at the bottom of the page -->
     <footer class="teacher-footer">
 
         <p>&copy; 2026 Burnside High School</p>
@@ -172,55 +192,74 @@
     <!-- LOGIN FORM JAVASCRIPT -->
     <script>
 
+        // get the account type input
         const accountType = document.getElementById("account_type");
 
+        // get the student and teacher buttons
         const studentButton = document.getElementById("student_btn");
         const teacherButton = document.getElementById("teacher_btn");
 
+        // get the username and student ID input elements
         const identifierLabel = document.getElementById("identifier_label");
         const identifierInput = document.getElementById("identifier");
 
+        // get the forgot password section
         const forgotPasswordSection = document.getElementById(
             "forgot_password_section"
         );
 
+        // get the teacher password information
         const teacherPasswordNote = document.getElementById(
             "teacher_password_note"
         );
 
 
+        // update the login form based on the selected account type
         function updateLoginForm(type) {
 
+            // save the selected account type
             accountType.value = type;
 
             if (type === "teacher") {
 
                 // Teacher login
+                // highlight the teacher button and remove the student selection
                 teacherButton.classList.add("active");
                 studentButton.classList.remove("active");
 
+                // update the button states
                 teacherButton.setAttribute("aria-pressed", "true");
                 studentButton.setAttribute("aria-pressed", "false");
 
+                // change the input label and placeholder for teachers
                 identifierLabel.textContent = "Teacher Username";
                 identifierInput.placeholder = "Enter teacher username";
 
+                // hide the student forgot password link
                 forgotPasswordSection.style.display = "none";
+
+                // show the teacher password information
                 teacherPasswordNote.style.display = "block";
 
             } else {
 
                 // Student login
+                // highlight the student button and remove the teacher selection
                 studentButton.classList.add("active");
                 teacherButton.classList.remove("active");
 
+                // update the button states
                 studentButton.setAttribute("aria-pressed", "true");
                 teacherButton.setAttribute("aria-pressed", "false");
 
+                // change the input label and placeholder for students
                 identifierLabel.textContent = "Student ID or School Email";
                 identifierInput.placeholder = "Enter your Student ID or email";
 
+                // show the student forgot password link
                 forgotPasswordSection.style.display = "block";
+
+                // hide the teacher password information
                 teacherPasswordNote.style.display = "none";
 
             }
@@ -228,13 +267,13 @@
         }
 
 
-        // Switch to student login
+        // Switch to student login when the student button is clicked
         studentButton.addEventListener("click", function () {
             updateLoginForm("student");
         });
 
 
-        // Switch to teacher login
+        // Switch to teacher login when the teacher button is clicked
         teacherButton.addEventListener("click", function () {
             updateLoginForm("teacher");
         });

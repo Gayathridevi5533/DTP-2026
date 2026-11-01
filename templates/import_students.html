@@ -2,15 +2,17 @@
 <html lang="en">
 
 <head>
+    <!-- page details -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Import Students</title>
 
+    <!-- website icon -->
     <link rel="icon" type="image/png"
       href="/static/images/favicon.png">
 
-    <!-- Your existing CSS -->
+    <!-- CSS for the page -->
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 
@@ -20,18 +22,23 @@
         TOP NAVBAR
     ========================= -->
 
+    <!-- top navigation bar -->
     <nav class="navbar">
 
         <div class="navbar-left">
+
+            <!-- Burnside High School logo -->
             <img
                 src="{{ url_for('static', filename='images/burnside-logo.png') }}"
                 alt="Burnside High School Logo"
                 class="school-logo"
             >
 
+            <!-- website name shown beside the logo -->
             <span class="navbar-title">Teacher Attendance</span>
         </div>
 
+        <!-- navigation links for the teacher pages -->
         <div class="navbar-right">
             <a href="{{ url_for('routes.teacher') }}"
                 class="nav-button">
@@ -53,6 +60,7 @@
 
     <main class="container">
 
+        <!-- page heading and short description -->
         <div class="page-header">
 
             <h1>Import Student Roll</h1>
@@ -68,6 +76,7 @@
              IMPORT CARD
         ========================== -->
 
+        <!-- card containing the student upload form -->
         <div class="import-card">
 
             <div class="import-card-header">
@@ -82,6 +91,7 @@
             </div>
 
 
+            <!-- form for uploading the student CSV file -->
             <form
                 method="POST"
                 enctype="multipart/form-data"
@@ -94,6 +104,7 @@
                         Student Roll CSV File
                     </label>
 
+                    <!-- allow the teacher to select a CSV file -->
                     <input
                         type="file"
                         id="csv_file"
@@ -105,6 +116,7 @@
                 </div>
 
 
+                <!-- submit the selected CSV file -->
                 <button
                     type="submit"
                     class="import-button"
@@ -115,6 +127,7 @@
             </form>
 
 
+            <!-- information about the file being uploaded -->
             <div class="import-help">
 
                 <strong>CSV file:</strong>
@@ -128,7 +141,7 @@
 
     </main>
 
-    <!-- PAGE FOOTER -->
+    <!-- footer at the bottom of the page -->
     <footer class="import-page-footer">
         <p>&copy; 2026 Burnside High School</p>
         <span>Attendance Verification System</span>

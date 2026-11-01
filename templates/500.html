@@ -1,19 +1,22 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- page details -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>500 - Internal Server Error</title>
 
+    <!-- website icon -->
     <link rel="icon" type="image/png"
       href="/static/images/favicon.png">
-    
+
+    <!-- error page styling -->
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/error.css') }}">
 </head>
 
 <body>
+    <!-- top section with the school logo and website name -->
     <header class="error-header">
         <img class="error-logo"
              src="{{ url_for('static', filename='images/burnside-logo.png') }}"
@@ -21,22 +24,28 @@
         <span class="error-brand">Attendance Verification System</span>
     </header>
 
+    <!-- main section of the error page -->
     <main class="error-main">
         <section class="error-card">
+
+            <!-- show the error code and heading -->
             <h2 class="error-number">500</h2>
             <h1 class="error-title">Something Went Wrong</h1>
 
+            <!-- message shown when something goes wrong with the system -->
             <p class="error-message">
                 We're sorry, but the system encountered an unexpected
                 error. Please try again later.
             </p>
 
+            <!-- take the user back to the login page -->
             <a class="error-button" href="{{ url_for('routes.login') }}">
                 Return to Login
             </a>
         </section>
     </main>
 
+    <!-- footer at the bottom of the page -->
     <footer class="error-footer">
         <p>&copy; 2026 Burnside High School | Attendance Verification System</p>
     </footer>

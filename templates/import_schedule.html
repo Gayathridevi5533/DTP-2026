@@ -3,14 +3,17 @@
 <html lang="en">
 
 <head>
+    <!-- page details -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Import Schedule</title>
 
+<!-- website icon -->
 <link rel="icon" type="image/png"
       href="/static/images/favicon.png">
 
+<!-- CSS for the page -->
 <link rel="stylesheet" href="/static/css/style.css">
 
 </head>
@@ -23,19 +26,23 @@
 ========================== -->
 
 
-<!-- TOP NAVBAR -->
+<!-- top navigation bar -->
 <nav class="navbar">
 
     <div class="navbar-left">
+
+        <!-- Burnside High School logo -->
         <img
             src="{{ url_for('static', filename='images/burnside-logo.png') }}"
             alt="Burnside High School Logo"
             class="school-logo"
         >
 
+        <!-- website name shown beside the logo -->
         <span class="navbar-title">Teacher Attendance</span>
     </div>
 
+    <!-- navigation links for the teacher pages -->
     <div class="navbar-right">
         <a href="{{ url_for('routes.teacher') }}"
            class="nav-button">
@@ -57,6 +64,7 @@
 
 <main class="container">
 
+    <!-- page heading and short description -->
     <div class="page-header">
 
         <h1>Import Schedule</h1>
@@ -72,6 +80,7 @@
          IMPORT CARD
     ========================== -->
 
+    <!-- card containing the schedule upload form -->
     <div class="import-card">
 
         <div class="import-card-header">
@@ -86,6 +95,7 @@
         </div>
 
 
+        <!-- form for uploading the schedule CSV file -->
         <form
             method="POST"
             enctype="multipart/form-data"
@@ -98,6 +108,7 @@
                     Schedule CSV File
                 </label>
 
+                <!-- allow the teacher to select a CSV file -->
                 <input
                     type="file"
                     id="csv_file"
@@ -111,6 +122,7 @@
 
             <!-- IMPORT BUTTON -->
 
+            <!-- submit the selected schedule file -->
             <button
                 type="submit"
                 class="import-button"
@@ -122,6 +134,7 @@
         </form>
 
 
+        <!-- show the required CSV format and an example -->
         <div class="import-help">
 
             <strong>CSV format:</strong>
@@ -130,6 +143,7 @@
                 Your CSV should contain:
             </p>
 
+            <!-- column headings needed in the schedule CSV -->
             <code>
                 start_date,end_date,week,day,start_time,end_time,class_code,teacher
             </code>
@@ -138,6 +152,7 @@
                 Example:
             </p>
 
+            <!-- example of a schedule entry -->
             <code>
                 2026-02-02,2026-02-06,A,Monday,09:00:00,09:55:00,STY5,WAJ
             </code>
@@ -148,7 +163,7 @@
 
 </main>
 
-<!-- PAGE FOOTER -->
+<!-- footer at the bottom of the page -->
 <footer class="import-page-footer">
     <p>&copy; 2026 Burnside High School</p>
     <span>Attendance Verification System</span>
