@@ -101,6 +101,24 @@ def load_user(user_id):
 # DATABASE MODEL
 # =========================
 
+# link students to the schedules they are assigned to
+student_schedule = db.Table(
+    "student_schedule",
+    db.metadata,
+    db.Column(
+        "schedule_id",
+        db.Integer,
+        db.ForeignKey("schedule.id"),
+        primary_key=True
+    ),
+    db.Column(
+        "student_id",
+        db.Integer,
+        db.ForeignKey("student.id"),
+        primary_key=True
+    )
+)
+
 # store student account details in the database
 class Student(UserMixin, db.Model):
 
@@ -142,6 +160,13 @@ class Student(UserMixin, db.Model):
     # stores the token temporarily used for resetting a password
     reset_token = db.Column(
         db.String(200)
+    )
+
+    # connect each student to their assigned schedules
+    schedules = db.relationship(
+        "Schedule",
+        secondary=student_schedule,
+        back_populates="students"
     )
 
     # students are not teacher accounts
@@ -256,6 +281,13 @@ class Schedule(db.Model):
     # teacher responsible for the scheduled session
     teacher = db.Column(
         db.String(50)
+    )
+
+    # connect each schedule to the students assigned to it
+    students = db.relationship(
+        "Student",
+        secondary=student_schedule,
+        back_populates="schedules"
     )
 
 
