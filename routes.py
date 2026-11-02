@@ -1,26 +1,30 @@
 """Routes for the Burnside High School Attendance Verification System."""
 
+# =========================
+# IMPORTS
+# =========================
 
-# import the database, mail and login manager from extensions
-from extensions import db, mail, login_manager
-
-# functions needed to calculate the distance between two locations
-from math import radians, sin, cos, sqrt, atan2
-
-# used to get the current date and time
-from datetime import datetime
-
-# used to create and send emails through Flask
-from flask_mail import Message
-
-# request is used to access information sent from the webpage
-from flask import request
-
-# used to generate random tokens for password resets
+# standard Python libraries
+import csv
+import re
 import secrets
 
-# import the Flask functions needed for pages, redirects and messages
-from flask import Blueprint, render_template, jsonify, redirect, url_for, flash
+from datetime import datetime
+from functools import wraps
+from io import TextIOWrapper
+from math import radians, sin, cos, sqrt, atan2
+
+# Flask functions used for pages, redirects and messages
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    jsonify,
+    redirect,
+    url_for,
+    flash,
+    abort
+)
 
 # functions used to manage logged in users
 from flask_login import (
@@ -29,17 +33,10 @@ from flask_login import (
     logout_user,
     login_required,
     current_user
-    )
+)
 
-# used for checking and validating text with regular expressions
-import re
-
-# used for reading CSV files
-import csv
-
-# allows the uploaded CSV file to be read as text
-from io import TextIOWrapper
-
+# used to create and send emails through Flask
+from flask_mail import Message
 
 # functions used to hash passwords and check them during login
 from werkzeug.security import (
@@ -47,19 +44,17 @@ from werkzeug.security import (
     check_password_hash
 )
 
-
-# used to keep the teacher access check separate from the actual route
-from functools import wraps
-
-# used to return an access denied error
-from flask import abort
+# import the database, mail and login manager from extensions
+from extensions import db, mail, login_manager
 
 
 # create the blueprint for all the routes in this file
 routes = Blueprint("routes", __name__)
 
-
+# =========================
 # SHARED TEACHER LOGIN
+# =========================
+
 # ADMIN CAN CHANGE THESE
 
 # teacher login details used for accessing the teacher dashboard
@@ -69,8 +64,7 @@ TEACHER_PASSWORD = "testpassword"
 
 @login_manager.user_loader
 def load_user(user_id):
-
-    """Load a student from the database using their user ID."""
+    """Load a student or teacher using their user ID."""
 
     # check if the logged in account is the teacher
     if user_id == "teacher":
@@ -119,8 +113,10 @@ student_schedule = db.Table(
     )
 )
 
+
 # store student account details in the database
 class Student(UserMixin, db.Model):
+    """Store student account details in the database."""
 
     # unique id automatically assigned to each student
     id = db.Column(
@@ -172,10 +168,12 @@ class Student(UserMixin, db.Model):
     # students are not teacher accounts
     @property
     def is_teacher(self):
+        """Identify this account as a student."""
         return False
 
     # return the student id with a prefix to identify student accounts
     def get_id(self):
+        """Return the student's login ID."""
         return f"student:{self.id}"
 
 
@@ -186,6 +184,7 @@ class Student(UserMixin, db.Model):
 
 # create the teacher account separately from the student database
 class Teacher(UserMixin):
+    """Represent the teacher account separately from student accounts."""
 
     # identify the teacher account
     id = "teacher"
@@ -198,11 +197,13 @@ class Teacher(UserMixin):
 
     # return the teacher id when Flask checks the logged in user
     def get_id(self):
+        """Return the teacher's login ID."""
         return "teacher"
 
     # identify this account as a teacher
     @property
     def is_teacher(self):
+        """Identify this account as a teacher."""
         return True
 
 
@@ -213,9 +214,11 @@ class Teacher(UserMixin):
 
 # check whether the logged in user is a teacher before opening a route
 def teacher_required(function):
+    """Check whether a user has teacher access."""
 
     @wraps(function)
     def decorated_function(*args, **kwargs):
+        """Check access before running the route."""
 
         # stop the request if the user is not a teacher
         if not getattr(current_user, "is_teacher", False):
@@ -229,6 +232,7 @@ def teacher_required(function):
 
 # store the attendance schedule information in the database
 class Schedule(db.Model):
+    """Store the attendance schedule information in the database."""
 
     # unique id for each schedule record
     id = db.Column(
@@ -293,6 +297,7 @@ class Schedule(db.Model):
 
 # store each student's attendance submission
 class Attendance(db.Model):
+    """Store each student's attendance submission."""
 
     # unique id for each attendance record
     id = db.Column(
@@ -327,7 +332,7 @@ class Attendance(db.Model):
     # records whether the attendance was allowed or denied
     status = db.Column(
         db.String(50)
-     )
+    )
 
     # automatically record the time when the attendance entry is created
     timestamp = db.Column(
@@ -361,9 +366,10 @@ MAX_DISTANCE = 200
 
 # calculate the distance between the student's location and the school
 def calculate_distance(lat1, lon1, lat2, lon2):
+    """Calculate the distance between two locations in metres."""
 
     # radius of the Earth in metres
-    R = 6371000
+    earth_radius = 6371000
 
     # find the difference between the two latitude and longitude values
     dlat = radians(lat2 - lat1)
@@ -381,7 +387,7 @@ def calculate_distance(lat1, lon1, lat2, lon2):
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
     # return the distance in metres
-    return R * c
+    return earth_radius * c
 
 
 # =========================
@@ -393,6 +399,7 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 @routes.route("/")
 @login_required
 def home():
+    """Display the student's attendance home page."""
 
     # send teachers directly to their own dashboard
     if getattr(current_user, "is_teacher", False):
@@ -447,6 +454,7 @@ def home():
 # receive the student's location from the webpage
 @routes.route("/verify_location", methods=["POST"])
 def verify_location():
+    """Check whether the submitted location is within school range."""
 
     # get the location information sent from JavaScript
     data = request.get_json()
@@ -488,6 +496,7 @@ def verify_location():
 @routes.route("/check_schedule")
 @login_required
 def check_schedule():
+    """Check whether attendance is available at the current time."""
 
     # get the current date and time
     now = datetime.now()
@@ -529,6 +538,7 @@ def check_schedule():
 @routes.route("/submit_reason", methods=["POST"])
 @login_required
 def submit_reason():
+    """Validate and save the student's attendance submission."""
 
     # teachers should not be able to submit student attendance
     if getattr(current_user, "is_teacher", False):
@@ -676,6 +686,7 @@ def submit_reason():
 @login_required
 @teacher_required
 def teacher():
+    """Display the teacher attendance dashboard."""
 
     # get all student accounts from the database
     students = Student.query.all()
@@ -707,6 +718,7 @@ def teacher():
 # handle both student and teacher login
 @routes.route("/login", methods=["GET", "POST"])
 def login():
+    """Handle student and teacher login."""
 
     # store an error message if the login details are incorrect
     error = None
@@ -782,6 +794,7 @@ def login():
 @routes.route("/logout")
 @login_required
 def logout():
+    """Log the current user out of the system."""
 
     # end the current login session
     logout_user()
@@ -799,6 +812,7 @@ def logout():
 # allow a new student to create an account
 @routes.route("/signup", methods=["GET", "POST"])
 def signup():
+    """Handle student account registration."""
 
     # check whether the signup form has been submitted
     if request.method == "POST":
@@ -858,6 +872,7 @@ def signup():
 # handle password reset requests
 @routes.route("/forgot_password", methods=["GET", "POST"])
 def forgot_password():
+    """Handle requests to reset a student password."""
 
     # check whether the reset form has been submitted
     if request.method == "POST":
@@ -932,6 +947,7 @@ Click the link below to reset your password:
 # route used to check whether email sending is working
 @routes.route("/test_mail")
 def test_mail():
+    """Send a test email to check the mail configuration."""
 
     # print a message in the terminal when this route is reached
     print("AFTER index:")
@@ -962,6 +978,7 @@ def test_mail():
 @login_required
 @teacher_required
 def import_students():
+    """Import student accounts from a CSV file."""
 
     # check whether a CSV file has been submitted
     if request.method == "POST":
@@ -1065,7 +1082,8 @@ def import_students():
 
                 # add an error if the student ID is not valid
                 errors.append(
-                    f"Row {row_number}: Student ID must be exactly 5 digits."
+                    f"Row {row_number}: "
+                    "Student ID must be exactly 5 digits."
                 )
 
                 # skip this row
@@ -1086,7 +1104,7 @@ def import_students():
                 # skip this row
                 continue
 
-            # add the student ID to the set so it can be checked against later rows
+            # add the ID to the set to check against later rows
             csv_student_codes.add(
                 student_code
             )
@@ -1138,7 +1156,7 @@ def import_students():
 
                 student_class=student_class,
 
-                # imported students will set their password through password reset
+                # students set their password through password reset
                 password="",
 
                 reset_token=None
@@ -1178,6 +1196,7 @@ def import_students():
     methods=["GET", "POST"]
 )
 def reset_password(token):
+    """Allow a student to reset their password using a token."""
 
     # find the student account that matches the reset token
     user = Student.query.filter_by(
@@ -1229,13 +1248,19 @@ def reset_password(token):
 @routes.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
+    """Allow a logged-in student to change their password."""
 
     # teachers cannot use the student password change page
     if getattr(current_user, "is_teacher", False):
 
-        flash("The teacher password can only be changed by the administrator.")
+        flash(
+            "The teacher password can only be changed "
+            "by the administrator."
+        )
 
-        return redirect(url_for("routes.teacher"))
+        return redirect(
+            url_for("routes.teacher")
+        )
 
     # check whether the change password form has been submitted
     if request.method == 'POST':
@@ -1246,17 +1271,22 @@ def change_password():
 
         # check whether the entered current password is correct
         if not check_password_hash(
-                current_user.password,
-                current_password):
+            current_user.password,
+            current_password
+        ):
 
             # display an error if the current password is incorrect
             flash('Current password is incorrect.')
 
             # return to the change password page
-            return redirect(url_for('routes.change_password'))
+            return redirect(
+                url_for('routes.change_password')
+            )
 
         # hash the new password before saving it
-        current_user.password = generate_password_hash(new_password)
+        current_user.password = generate_password_hash(
+            new_password
+        )
 
         # save the updated password
         db.session.commit()
@@ -1265,7 +1295,9 @@ def change_password():
         flash('Password changed successfully.')
 
         # send the student back to the login page
-        return redirect(url_for('routes.login'))
+        return redirect(
+            url_for('routes.login')
+        )
 
     # show the change password form
     return render_template('change_password.html')
@@ -1280,6 +1312,7 @@ def change_password():
 @login_required
 @teacher_required
 def import_schedule():
+    """Import attendance schedules from a CSV file."""
 
     # check whether a schedule file has been submitted
     if request.method == "POST":
@@ -1314,14 +1347,37 @@ def import_schedule():
                 # Get values from CSV
 
                 # get each schedule value from the current CSV row
-                start_date_text = row.get("start_date", "").strip()
-                end_date_text = row.get("end_date", "").strip()
-                week = row.get("week", "").strip()
-                day = row.get("day", "").strip()
-                start_time_text = row.get("start_time", "").strip()
-                end_time_text = row.get("end_time", "").strip()
-                class_code = row.get("class_code", "").strip()
-                teacher = row.get("teacher", "").strip()
+                start_date_text = row.get(
+                    "start_date", ""
+                ).strip()
+
+                end_date_text = row.get(
+                    "end_date", ""
+                ).strip()
+
+                week = row.get(
+                    "week", ""
+                ).strip()
+
+                day = row.get(
+                    "day", ""
+                ).strip()
+
+                start_time_text = row.get(
+                    "start_time", ""
+                ).strip()
+
+                end_time_text = row.get(
+                    "end_time", ""
+                ).strip()
+
+                class_code = row.get(
+                    "class_code", ""
+                ).strip()
+
+                schedule_teacher = row.get(
+                    "teacher", ""
+                ).strip()
 
                 # Check required fields
 
@@ -1385,7 +1441,7 @@ def import_schedule():
 
                 # Create schedule record
 
-                # create a new schedule using the information from the CSV row
+                # create a new schedule using the CSV row information
                 new_schedule = Schedule(
                     start_date=start_date,
                     end_date=end_date,
@@ -1394,7 +1450,7 @@ def import_schedule():
                     start_time=start_time,
                     end_time=end_time,
                     class_code=class_code,
-                    teacher=teacher
+                    teacher=schedule_teacher
                 )
 
                 # add the schedule to the database
@@ -1408,7 +1464,8 @@ def import_schedule():
 
                 # record which row contains the incorrect information
                 errors.append(
-                    f"Row {row_number}: Invalid date or time format. {e}"
+                    f"Row {row_number}: "
+                    f"Invalid date or time format. {e}"
                 )
 
         # save all the imported schedule records
@@ -1432,6 +1489,9 @@ def import_schedule():
 # display the custom page when a page cannot be found
 @routes.app_errorhandler(404)
 def page_not_found(error):
+    """Display the custom page not found error."""
+
+    _ = error  # acknowledge the error argument required by Flask
 
     # show the 404 error page and return the correct status code
     return render_template("404.html"), 404
@@ -1440,6 +1500,9 @@ def page_not_found(error):
 # display the custom page when an internal server error occurs
 @routes.app_errorhandler(500)
 def internal_server_error(error):
+    """Display the custom internal server error page."""
+
+    _ = error  # acknowledge the error argument required by Flask
 
     # undo any unfinished database changes after the error
     db.session.rollback()
@@ -1447,43 +1510,45 @@ def internal_server_error(error):
     # show the 500 error page
     return render_template("500.html"), 500
 
-
 # display the custom page for an unsupported HTTP version
+
+
 @routes.app_errorhandler(505)
 def http_version_not_supported(error):
+    """Display the unsupported HTTP version error page."""
+
+    _ = error  # acknowledge the error argument required by Flask
 
     # show the 505 error page
     return render_template("505.html"), 505
-
 
 # =========================
 # BLOCK MOBILE DEVICES
 # =========================
 
 # check the device making a request before loading the page
+
+
 @routes.before_request
 def block_mobile_devices():
+    """Check the user agent and block mobile devices."""
 
     # get the browser's user agent information
     user_agent = request.headers.get("User-Agent", "").lower()
 
     # list of words used to identify mobile devices
     mobile_keywords = [
-
         "android",
-
         "iphone",
-
         "ipad",
-
         "ipod",
-
         "mobile"
-
     ]
 
     # check whether any of the mobile keywords appear in the user agent
     if any(keyword in user_agent for keyword in mobile_keywords):
 
-        # display the blocked device page instead of loading the requested page
+        # show the blocked device page instead of the requested page
         return render_template("device_blocked.html"), 403
+
+    
